@@ -3,7 +3,14 @@
             [tailwind.db :as db]))
 (defn main
   []
-  [:section "Converter"])
+  [:section {:class "m-3 flex-col"}
+   [:h1
+    {:class "text-4xl text-orange-600"}
+    "Risk Measure Conversions"]
+   [:form
+    [:input  {:type "text"
+              :class "border-r-2 border-b-2 p-4 w-1/6  rounded-md shadow-lg"}]]
+   [:p {:class "border-r-2 border-b-2 p-4 w-1/6  rounded-md shadow-lg"} "A text box"]])
 
 (defn public
   []
