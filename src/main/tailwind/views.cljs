@@ -21,7 +21,7 @@
      [:li {:class "m-4"}
       [:b "Relative risk $RR$."]
       [:p {:class "mt-2"} 
-       "By definition, $RR = p/r$.  So the final risk is $p = r \times RR$."]]
+       "By definition, $RR = p/r$.  So the final risk is $p = r \\times RR$."]]
      [:li {:class "m-4"}
       [:b "Percentage change $PC$."]
       [:p {:class "mt-2"} 
