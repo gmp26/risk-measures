@@ -2,6 +2,7 @@
 /.lsp
 /.cpcache
 /.vscode
+/.calva
 /public/js
 /public/css
 /node_modules
@@ -9,5 +10,4 @@
 /.shadow-cljs
 /*.iml
 /.nrepl-port
-/.idea
 shadow-cljs-tailwind.iml
