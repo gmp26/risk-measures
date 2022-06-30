@@ -5,9 +5,12 @@
 
 (defn app
   []
-  (if (:auth? @db/state)
-    [views/authenticated]
-    [views/public]))
+  (condp = (:auth? @db/state)
+    true [views/authenticated]
+    false [views/public]
+    :main [views/main]
+    :else (js/alert "bad state"))
+  )
 
 ;; start is called by init and after code reloading finishes
 (defn ^:dev/after-load start []
@@ -24,3 +27,10 @@
 ;; this is called before any code is reloaded
 (defn ^:dev/before-load stop []
   (js/console.log "stop"))
+
+(comment
+  (swap! db/state assoc :auth? false)
+  (swap! db/state assoc :auth? true)
+  (swap! db/state assoc :auth? :main)
+  
+  )
