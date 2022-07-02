@@ -9,7 +9,7 @@
     true [views/authenticated]
     false [views/public]
     :main [views/main]
-    :else (js/alert "bad stater"))
+    :else (js/alert "bad states"))
   )
 
 ;; start is called by init and after code reloading finishes
