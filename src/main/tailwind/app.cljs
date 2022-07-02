@@ -1,7 +1,11 @@
 (ns tailwind.app
-  (:require [reagent.dom :as dom]
+  (:require ["react-dom/client" :refer [createRoot]]
+            [goog.dom :as gdom]
+            [reagent.core :as r]
             [tailwind.views :as views]
-            [tailwind.db :as db]))
+            [tailwind.db :as db]
+            
+            [reagent.dom :as dom]))
 
 (defn app
   []
@@ -12,10 +16,19 @@
     :else (js/alert "bad states"))
   )
 
-;; start is called by init and after code reloading finishes
-(defn ^:dev/after-load start []
-  (dom/render [app]
-              (.getElementById js/document "app"))
+(defonce root (createRoot (gdom/getElement "app")))
+
+
+(defn init []
+  ;; init is called ONCE when the page loads
+  ;; this is called in the index.html and must be exported
+  ;; so it is available even in :advanced release builds
+  (js/console.log "init")
+  (.render root (r/as-element [views/main]))
+ )
+
+(defn ^:dev/after-load rerender []
+  (init)
 
   ;renderMathInElement may be not immediately available due to deferred load
   (try (when js/renderMathInElement
@@ -29,12 +42,6 @@
        (catch js/ReferenceError _e
          #_(println "ERROR:" e))))
 
-(defn init []
-  ;; init is called ONCE when the page loads
-  ;; this is called in the index.html and must be exported
-  ;; so it is available even in :advanced release builds
-  (js/console.log "init")
-  (start))
 
 ;; this is called before any code is reloaded
 (defn ^:dev/before-load stop []
@@ -44,5 +51,4 @@
   (swap! db/state assoc :auth? false)
   (swap! db/state assoc :auth? true)
   (swap! db/state assoc :auth? :main)
-  
   )
