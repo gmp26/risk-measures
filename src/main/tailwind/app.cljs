@@ -17,15 +17,17 @@
   (dom/render [app]
               (.getElementById js/document "app"))
 
-  ;renderMathInElement may not be immediately available due to deferred load
-  (when js/renderMathInElement
-    (js/renderMathInElement
-     js/document.body
-     #js{:delimiters #js[#js{:left "$$", :right "$$", :display true},
-                         #js{:left "$", :right "$", :display false},
-                         #js{:left "\\(", :right "\\)", :display false},
-                         #js{:left "\\[", :right "\\]", :display true}],
-         :throwOnError false})))
+  ;renderMathInElement may be not immediately available due to deferred load
+  (try (when js/renderMathInElement
+         (js/renderMathInElement
+          js/document.body
+          #js{:delimiters #js[#js{:left "$$", :right "$$", :display true},
+                              #js{:left "$", :right "$", :display false},
+                              #js{:left "\\(", :right "\\)", :display false},
+                              #js{:left "\\[", :right "\\]", :display true}],
+              :throwOnError false}))
+       (catch js/ReferenceError _e
+         #_(println "ERROR:" e))))
 
 (defn init []
   ;; init is called ONCE when the page loads
