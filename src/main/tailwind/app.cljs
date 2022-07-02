@@ -9,13 +9,23 @@
     true [views/authenticated]
     false [views/public]
     :main [views/main]
-    :else (js/alert "bad state"))
+    :else (js/alert "bad stater"))
   )
 
 ;; start is called by init and after code reloading finishes
 (defn ^:dev/after-load start []
   (dom/render [app]
-    (.getElementById js/document "app")))
+              (.getElementById js/document "app"))
+
+  ;renderMathInElement may not be immediately available due to deferred load
+  (when js/renderMathInElement
+    (js/renderMathInElement
+     js/document.body
+     #js{:delimiters #js[#js{:left "$$", :right "$$", :display true},
+                         #js{:left "$", :right "$", :display false},
+                         #js{:left "\\(", :right "\\)", :display false},
+                         #js{:left "\\[", :right "\\]", :display true}],
+         :throwOnError false})))
 
 (defn init []
   ;; init is called ONCE when the page loads

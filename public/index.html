@@ -10,9 +10,13 @@
     <!-- The loading of KaTeX is deferred to speed up page rendering -->
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" integrity="sha384-X/XCfMm41VSsqRNQgDerQczD69XqmjOOOwYQvr/uuC+j4OPoNhVgjdGFwhvN02Ja" crossorigin="anonymous"></script>
 
+
+
     <!-- To automatically render math in text elements, include the auto-render extension: -->
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
-        onload="renderMathInElement(document.body,
+        onload=
+        "function renderMath() {
+            renderMathInElement(document.body,
         {
           // customised options
           // • auto-render specific keys, e.g.:
@@ -24,7 +28,8 @@
           ],
           // • rendering keys, e.g.:
           throwOnError : false
-        });"></script>
+        })};
+        renderMath();"></script>
 </head>
 
 <body>
