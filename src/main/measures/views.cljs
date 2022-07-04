@@ -23,7 +23,7 @@
         selected? (fn [m] (= (:key m) selected-measure))]
     [:div {:class "border border-gray-600 m-4 p-4 rounded-md w-60"}
      [:span "Choose a measure"]
-     (into [:ul.m-4.w-100%
+     (into [:ul.mx-2.w-100%
             {:class "sm:w-1/8"}]
            (map (fn [m] [:li {:class (str "px-2 py-2  w-full"
                                           " cursor-pointer "
@@ -60,7 +60,7 @@
   ([options key label]
    [:<>
     
-    [:form.border.border-gray-600.p-4.w-60
+    [:form.border.border-gray-600.p-4.w-72
      [:b [:label {:for (name key)} label ":"]]
      [:input.ml-2
       (medley/deep-merge {:id (name key)
@@ -76,22 +76,37 @@
 
 (defn action-button
   [label]
-  [base/button-primary {:class "w-60"} label])
+  [base/button-primary {:class "w-full p-2"} label])
 
 
-(defn action-menu []
-  [:ul
-   {:class "m-4"}
-   [:li.p2 [action-button "Show me the maths"]]
-   [:li.p2 [action-button "Calculate final risk"]]
-   [:li.p2 [action-button "Calculate risk measure"]]])
+(defn action-menu
+  []
+  (let [selected-tool (:selected-tool @db/state)
+        selected? (fn [m] (= (:key m) selected-tool))]
+    [:div {:class "border border-gray-600 m-4 p-4 rounded-md w-60"}
+     [:span "Choose a tool"]
+     (into [:ul.mx-2.w-100%
+            {:class "sm:w-1/8"}]
+           (map (fn [m] [:li {:class (str "px-2 py-2  w-full"
+                                          " cursor-pointer "
+                                          (if (selected? m)
+                                            "text-white bg-blue-500"
+                                            "text-lg text-gray-400"))
+                              :on-click #(events/select-tool (:key m))}
+                         (:title m) " >"])
+                info/tools))]))
+
+
 
 (defn master-detail
   []
-  [:<>
-   [measures-menu]
-   [action-menu]
-   [measures-detail]])
+  [:section
+   {:class "flex-col"}
+   [:div {:class "w-1/4"}
+    [measures-menu]
+    [action-menu]]
+   [:div {:class "w-3/4"}
+    [measures-detail]]])
 
    #_[:div {:class "m-4"}
       "Let the baseline risk be $r$.  The risk in the 'active' group, $p$, depends on the measure of change"

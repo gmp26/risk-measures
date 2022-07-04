@@ -22,6 +22,21 @@
 (defn selected-measure []
   (:selected-measure (@db/state)))
 
+(defn select-tool
+  "Change the selected tool and kick of a maths re-render.
+   The re-ender must occur after the HTML has rerendered, so we delay it.
+   
+   Note: I expected triggering base/render-math from a :component-did-mount/update lifecycle
+   method to work here, but it doesn't. Hence the setTimeout kludge.
+   "
+  [key]
+  (swap! db/state assoc :selected-tool key)
+  (js/setTimeout base/render-math 100))
+
+(defn selected-tool []
+  (:selected-tool (@db/state)))
+
+
 (defn go-home []
   (set-db-key :page? :home))
 

@@ -36,8 +36,7 @@
   ([options label]
    [:button
     (medley/deep-merge options
-           {:class "w-60 inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded text-lg"}
-           )
+                       {:class "inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded text-lg"})
     label])
   ([label]
    (button-primary nil label))

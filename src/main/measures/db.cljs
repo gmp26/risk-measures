@@ -4,7 +4,8 @@
 (defonce state (r/atom {:baseline 0.1
                         :page? :flash
                         :user-dropdown? true
-                        :selected-measure :RR}))
+                        :selected-measure :RR
+                        :selected-tool :maths}))
 
 (defn flash?
   "Must be called from a component"

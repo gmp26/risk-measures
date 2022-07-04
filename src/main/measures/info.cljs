@@ -48,7 +48,18 @@
 (defn measure-by [key]
   (first ((group-by :key measures) key)))
 
+;;;;
 
+(def tools
+  [{:key "math"
+    :title "Show formulae"}
+   {:key "final"
+    :title "Calculate a final risk"}
+   {:key "Calculate the risk measure"
+    :title "Show formulae"}])
+
+(defn tools-by [key]
+  (first ((group-by :key tools) key)))
 
 (comment
   (def key :RR)
