@@ -60,7 +60,7 @@
 
 (defn button-secondary-link
   ([options label]
-   [:a (medley/deep-mergemerge {:class 
+   [:a (medley/deep-merge {:class 
                "h-10 px-6 py-2 h-auto text-indigo-700 transition-colors duration-150 border border-indigo-500 rounded-lg focus:shadow-outline hover:bg-indigo-500 hover:text-indigo-100"
                #_"cursor-pointer ml-4 inline-flex text-gray-700 bg-gray-100 border border-red-100 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg"}
               options)

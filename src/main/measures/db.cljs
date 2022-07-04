@@ -7,11 +7,14 @@
                         :selected-measure :RR}))
 
 (defn flash?
+  "Must be called from a component"
   []
   (= (:page? @state) :flash))
 
-(defn home? []
+(defn home? 
+  "Must be called from a component"
+  []
   (= (:page? @state) :home))
 
-(home?)
+
   

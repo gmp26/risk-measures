@@ -4,7 +4,8 @@
    [measures.base :as base :refer [page button-primary button-secondary-link link section1 section2 para spacer]]
    [measures.events :as events]
    [measures.db :as db]
-   [measures.info :as info]))
+   [measures.info :as info]
+   [medley.core :as medley]))
 
 (defn current-measure
   []
@@ -20,17 +21,19 @@
   []
   (let [selected-measure (:selected-measure @db/state)
         selected? (fn [m] (= (:key m) selected-measure))]
-    [:div {:class "border border-gray-600 m-4 p8 rounded-md w-60"}
+    [:div {:class "border border-gray-600 m-4 p-4 rounded-md w-60"}
+     [:span "Choose a measure"]
      (into [:ul.m-4.w-100%
             {:class "sm:w-1/8"}]
            (map (fn [m] [:li {:class (str "px-2 py-2  w-full"
                                           " cursor-pointer "
                                           (if (selected? m)
                                             "text-white bg-blue-500"
-                                            "text-lg"))
+                                            "text-lg text-gray-400"))
                               :on-click #(events/select-measure (:key m))}
                          (:title m) " >"])
                 info/measures))]))
+
 
 (defn measures-detail
   []
@@ -46,10 +49,48 @@
         [:li.m-4
           (:maths m)]]])))
 
+(defn handler [key]
+  (fn [e]
+    (do
+      (js/console.log "e: " (-> e .-target .-value))
+      (events/set-db-key key (-> e .-target .-value)))))
+
+
+(defn enter
+  ([options key label]
+   [:<>
+    
+    [:form.border.border-gray-600.p-4.w-60
+     [:b [:label {:for (name key)} label ":"]]
+     [:input.ml-2
+      (medley/deep-merge {:id (name key)
+              :class "text-lg"}
+             [:input {:type "number"
+                      :min "0"
+                      :max "1"
+                      :value (key @db/state)}]
+             options)]]])
+  ([key label]
+   (enter nil key label)))
+
+
+(defn action-button
+  [label]
+  [base/button-primary {:class "w-60"} label])
+
+
+(defn action-menu []
+  [:ul
+   {:class "m-4"}
+   [:li.p2 [action-button "Show me the maths"]]
+   [:li.p2 [action-button "Calculate final risk"]]
+   [:li.p2 [action-button "Calculate risk measure"]]])
+
 (defn master-detail
   []
   [:<>
    [measures-menu]
+   [action-menu]
    [measures-detail]])
 
    #_[:div {:class "m-4"}
