@@ -10,7 +10,7 @@
 
 (defn app
   []
-  (condp = (:auth? @db/state)
+  (condp = (:page @db/state)
     :main [views/main]
     :else (js/alert "bad states"))
   )
@@ -27,9 +27,10 @@
  )
 
 (defn ^:dev/after-load rerender []
-  ;(init)
+  (init)
 
   ;renderMathInElement may be not immediately available due to deferred load
+  (js/console.log "RELOAD")
   (try (when js/renderMathInElement
          (js/renderMathInElement
           js/document.body
@@ -47,5 +48,5 @@
   (js/console.log "stop"))
 
 (comment
-  (swap! db/state assoc :auth? :main)
+  (swap! db/state assoc :page :main)
   )
