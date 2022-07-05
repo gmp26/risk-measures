@@ -21,7 +21,7 @@
   []
   (let [selected-measure (:selected-measure @db/state)
         selected? (fn [m] (= (:key m) selected-measure))]
-    [:div {:class "border border-gray-600 m-4 p-4 rounded-md w-60"}
+    [:div {:class "border border-gray-600 m-4 p-4 rounded-md w-60 shadow-lg"}
      [:span "Choose a measure"]
      (into [:ul.mx-2.w-100%
             {:class "sm:w-1/8"}]
@@ -31,7 +31,7 @@
                                             "text-white bg-blue-500"
                                             "text-lg text-gray-400"))
                               :on-click #(events/select-measure (:key m))}
-                         (:title m) " >"])
+                         (:title m)])
                 info/measures))]))
 
 
@@ -41,19 +41,17 @@
     (let [m (current-measure)]
       [:<>
        [section2 (str "The Mathematics of " (:title m) " $(" (:name m) ")$")]
-       [para [:<>]]
-       [:section {:class "m-4"}
-        "Let the baseline risk be $r$. 
-       The risk in the 'active' group, $p$, depends on the measure of change"]
-       [:ul
-        [:li.m-4
-          (:maths m)]]])))
+       [:<>
+        [:section {:class "m-4"}
+         "Let the baseline risk be $r$. 
+          The risk in the 'active' group, $p$, depends on the measure of change"]
+        [:ul
+         [:li.m-4
+          (:maths m)]]]])))
 
 (defn handler [key]
   (fn [e]
-    (do
-      (js/console.log "e: " (-> e .-target .-value))
-      (events/set-db-key key (-> e .-target .-value)))))
+    (events/set-db-key key (-> e .-target .-value))))
 
 
 (defn enter
@@ -83,7 +81,7 @@
   []
   (let [selected-tool (:selected-tool @db/state)
         selected? (fn [m] (= (:key m) selected-tool))]
-    [:div {:class "border border-gray-600 m-4 p-4 rounded-md w-60"}
+    [:div {:class "shadow-lg border border-gray-600 m-4 p-4 rounded-md w-60"}
      [:span "Choose a tool"]
      (into [:ul.mx-2.w-100%
             {:class "sm:w-1/8"}]
@@ -93,7 +91,7 @@
                                             "text-white bg-blue-500"
                                             "text-lg text-gray-400"))
                               :on-click #(events/select-tool (:key m))}
-                         (:title m) " >"])
+                         (:title m)])
                 info/tools))]))
 
 
@@ -101,11 +99,11 @@
 (defn master-detail
   []
   [:section
-   {:class "flex-col"}
-   [:div {:class "w-1/4"}
+   {:class "flex flex-row"}
+   [:div {:class "w-64"}
     [measures-menu]
     [action-menu]]
-   [:div {:class "w-3/4"}
+   [:div
     [measures-detail]]])
 
    #_[:div {:class "m-4"}
