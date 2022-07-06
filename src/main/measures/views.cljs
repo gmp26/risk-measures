@@ -60,9 +60,9 @@
                          :max "1"
                          :step "0.01"
                          :value (key @db/state)
-                         :on-change (fn [e] (events/set-db-key key (-> e .-target .-value)))
-                         }
-                        options)]])
+                         :on-change (fn [e] (events/set-db-key key (-> e .-target .-value)))}
+                        options)]
+    (str " or " (* (key @db/state) 100) "%")])
   ([key label]
    (enter nil key label)))
 
@@ -95,11 +95,19 @@
   []
   (let [measure (info/current-measure)]
     (fn []
-      [:section {:class "flex flex-col"}
-       [section2 "Calculate the final risk from the baseline risk and the risk measure"]
-       [enter {:min 1 :max 10 :step 0.01} :baseline "Enter baseline risk"]
-       [enter {:min (:min measure) :max (:max measure)} :measure-value (str "Enter " (string/lower-case (:title measure)))]
-       [:b.ml-4 "The final Risk is " ((:active-risk measure) (:baseline @db/state) (:measure-value @db/state))]]))
+      (let [final (js/Number ((:active-risk measure) (:baseline @db/state) (:measure-value @db/state)))]
+        [:section {:class "flex flex-col"}
+         [section2 "Calculate the final risk from the baseline risk and the risk measure"]
+         [enter {:min 1 :max 10 :step 0.01} :baseline "Enter baseline risk"]
+         [enter {:min (:min measure) :max (:max measure)} :measure-value (str "Enter " (string/lower-case (:title measure)))]
+         [:span.ml-4 "The final Risk is "
+          [:b.text-4xl (.toPrecision (js/Number final) 3)]
+          " or "
+          [:b.text-4xl (.toFixed (js/Number (* final 100)) 0) "%"]
+
+          #_(.toPrecision (js/Number ((:active-risk measure) (:baseline @db/state) (:measure-value @db/state)))
+                          2)]
+         ])))
   )
 (comment
   (info/current-measure)

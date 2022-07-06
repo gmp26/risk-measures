@@ -74,9 +74,9 @@
   [{:key :maths
     :title "Show the maths"}
    {:key :calc-final
-    :title "Calculate final risk"}
+    :title "Final risk calculator"}
    {:key :calc-measure
-    :title (str "Calculate $" (:name (current-measure)) "$")}]
+    :title (str (:title (current-measure)) " calculator")}]
   )
 
 (defn tool-by [key]

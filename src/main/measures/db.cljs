@@ -4,12 +4,8 @@
 (defonce state (r/atom {:baseline 0.1
                         :final 0.1
                         :measure-value 1
-                        :RR 1
-                        :PC 0
-                        :OR 1
-                        :HR 1
+                        :sig-figs 2
                         :page? :flash
-                        :user-dropdown? true
                         :selected-measure :RR
                         :selected-tool :maths}))
 
