@@ -19,8 +19,8 @@
            (map (fn [m] [:li {:class (str "px-2 py-2  w-full"
                                           " cursor-pointer "
                                           (if (selected? m)
-                                            "text-white bg-blue-500"
-                                            "text-lg text-gray-400"))
+                                            "text-white bg-blue-500 hover:bg-indigo-500"
+                                            "text-lg text-gray-400 hover:bg-indigo-500"))
                               :on-click #(events/select-measure (:key m))}
                          (:title m)])
                 info/measures))]))
@@ -54,17 +54,36 @@
     [:b [:label {:for (name key)} label ":"]]
     [:input
      (medley/deep-merge {:id (name key)
-                         :class "ml-4 text-lg w-60"
+                         :class "ml-4 text-lg w-20"
                          :type "number"
                          :min "0"
                          :max "1"
                          :step "0.01"
                          :value (key @db/state)
-                         :on-change (fn [e] (events/set-db-key key (-> e .-target .-value)))}
-                        options)]
-    (str " or " (* (key @db/state) 100) "%")])
+                         :on-change (fn [e] (events/set-db-key key (js/Number (-> e .-target .-value))))}
+                        options)]])
   ([key label]
    (enter nil key label)))
+
+(defn enter-percent
+  ([options key label]
+   #_[:div (pr-str [options key (keyword? key) label])]
+   [:form.m-4.w-full
+    {:on-submit (fn [e] (-> e .-nativeEvent .preventDefault))}
+    [:b [:label {:for (name key)} label ":"]]
+    [:input
+     (medley/deep-merge {:id (name key)
+                         :class "ml-4 text-lg w-20"
+                         :type "number"
+                         :min "0"
+                         :max "1"
+                         :step "0.01"
+                         :value (* 100 (js/Number (key @db/state)))
+                         :on-change (fn [e] (events/set-db-key key (/ (js/Number (-> e .-target .-value)) 100)))}
+                        options)] [:span.text-2xl " %"]])
+  ([key label]
+   (enter nil key label)))
+
 
 
 
@@ -98,8 +117,12 @@
         final (js/Number ((:active-risk measure) (:baseline @db/state) (:measure-value @db/state)))
         measure-title (string/lower-case (:title measure))]
     [:section {:class "flex flex-col"}
+     [:div (pr-str [(:baseline @db/state) (:measure-value @db/state)])]
      [section2 (str "Calculate the final risk from the baseline risk and the " measure-title)]
-     [enter {:min 1 :max 10 :step 0.01} :baseline "Enter baseline risk"]
+     [:span 
+      [enter-percent {:min 0 :max 100 :step 1} :baseline "Enter baseline risk "]
+      [enter {:min 0 :max 1 :step 0.01} :baseline "or as a probability "]
+      ]
      [enter {:min (:min measure) :max (:max measure)} :measure-value (str "Enter " measure-title)]
      [:span.ml-4 "The final Risk is "
       [:b.text-4xl (.toPrecision (js/Number final) 3)]
@@ -176,31 +199,32 @@
            If you need more, visit"
     [link {:href "https://realrisk.wintoncentre.uk/"
                             :target "_blank"} "the full version."]]
-   [:div {:class "hidden md:block bg-gray-600 p-4 mt-8 text-white rounded-md"} 
-    [para [:span.text-base.text-white "Many studies compare the risks in an 'active' group to the risks
-          in a 'baseline' or 'control' group.
-          The results are often published as some relative measure risk" "."
-                                                                      " Depending on context, you may encounter Relative Risks, Percentage Changes, Odds Ratios, or Hazard Ratios. "]]
-    [para [:span.text-base.text-white "The maths differs in each case, but the final real risk
-            is always determined by applying the relative risk measurement to the baseline risk.
-            " [:b "Here, we provide calculators and a summary of the maths involved in using each risk measure."]]]]
+   [:div {:class "hidden md:block bg-gray-200 p-4 mt-8  rounded-md"}
+    [para [:span {:class "text-base text-2xl"} "Many studies compare the risks in an 'active' group to the risks
+          in a 'baseline' or 'control' group."]
+     [para "
+          The results are often published as some relative measure risk"] "."
+     " Depending on context, you may encounter Relative Risks, Percentage Changes, Odds Ratios, or Hazard Ratios. "]
+    [para [:span.text-base "The maths differs in each case, but the final real risk
+            is always determined by applying the relative risk measurement to the baseline risk."]]
+    [para [:i "Here, we provide calculators and definitions for each of these risk measure."]]]
    #_[para [:b.text-blue-400 "Choose a risk measure to continue:"]]])
 
 
 (defn flash
   []
   [:section {:class "text-gray-600 body-font"}
-   [:div {:class "container mx-auto flex px-5 py- md:flex-row flex-col items-center"}
+   [:div {:class "container mx-auto flex px-5 py- md:flex-row flex-col items-start"}
     [:div {:class "lg:flex md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center"}
      [:h1 {:class "title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900"}
       "RealRisk - Light"]
      [intro]
      [:section.my-8.flex.justify-center.space-between
-      [button-primary {:on-click events/go-home} "Light Version"]
-      [spacer]
       [button-secondary-link {:href "https://realrisk.wintoncentre.uk/"
-                              :target "_blank"} "Full Version"]]]
-    [:div {:class "lg:max-w-lg lg:w-full md:w-1/2 w-5/6"}
+                              :target "_blank"} "Full Version"]
+      [spacer]
+      [button-primary {:on-click events/go-home} "Light Version"]]]
+    [:div {:class "sm:block :max-w-2xl lg:w-full md:w-1/2 w-5/6 "}
      [:img {:class "object-cover object-center rounded-md"
             :alt "hero"
             :src "/assets/flash.png"}]]]
