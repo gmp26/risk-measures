@@ -5,17 +5,8 @@
    [measures.events :as events]
    [measures.db :as db]
    [measures.info :as info]
-   [medley.core :as medley]))
-
-(defn current-measure
-  []
-  (let [selected-measure (:selected-measure @db/state)]
-    (info/measure-by selected-measure)
-    ))
-
-(comment
-  (current-measure)
-  )
+   [medley.core :as medley]
+   [clojure.string :as string]))
 
 (defn measures-menu
   []
@@ -35,10 +26,10 @@
                 info/measures))]))
 
 
-(defn measures-detail
+(defn maths-detail
   []
   (fn []
-    (let [m (current-measure)]
+    (let [m (info/current-measure)]
       [:<>
        [section2 (str "The Mathematics of " (:title m) " $(" (:name m) ")$")]
        [:<>
@@ -49,6 +40,7 @@
          [:li.m-4
           (:maths m)]]]])))
 
+
 (defn handler [key]
   (fn [e]
     (events/set-db-key key (-> e .-target .-value))))
@@ -56,28 +48,33 @@
 
 (defn enter
   ([options key label]
-   [:<>
-    
-    [:form.border.border-gray-600.p-4.w-72
-     [:b [:label {:for (name key)} label ":"]]
-     [:input.ml-2
-      (medley/deep-merge {:id (name key)
-              :class "text-lg"}
-             [:input {:type "number"
-                      :min "0"
-                      :max "1"
-                      :value (key @db/state)}]
-             options)]]])
+   #_[:div (pr-str [options key (keyword? key) label])]
+   [:form.m-4.w-full
+    {:on-submit (fn [e] (-> e .-nativeEvent .preventDefault))}
+    [:b [:label {:for (name key)} label ":"]]
+    [:input
+     (medley/deep-merge {:id (name key)
+                         :class "ml-4 text-lg w-60"
+                         :type "number"
+                         :min "0"
+                         :max "1"
+                         :step "0.01"
+                         :value (key @db/state)
+                         :on-change (fn [e] (events/set-db-key key (-> e .-target .-value)))
+                         }
+                        options)]])
   ([key label]
    (enter nil key label)))
 
 
-(defn action-button
+
+
+(defn tool-button
   [label]
   [base/button-primary {:class "w-full p-2"} label])
 
 
-(defn action-menu
+(defn tool-menu
   []
   (let [selected-tool (:selected-tool @db/state)
         selected? (fn [m] (= (:key m) selected-tool))]
@@ -92,19 +89,51 @@
                                             "text-lg text-gray-400"))
                               :on-click #(events/select-tool (:key m))}
                          (:title m)])
-                info/tools))]))
+                (info/tools)))]))
 
+(defn final-risk-calculator
+  []
+  (let [measure (info/current-measure)]
+    (fn []
+      [:section {:class "flex flex-col"}
+       [section2 "Calculate the final risk from the baseline risk and the risk measure"]
+       [enter {:min 1 :max 10 :step 0.01} :baseline "Enter baseline risk"]
+       [enter {:min (:min measure) :max (:max measure)} :measure-value (str "Enter " (string/lower-case (:title measure)))]
+       [:b.ml-4 "The final Risk is " ((:active-risk measure) (:baseline @db/state) (:measure-value @db/state))]]))
+  )
+(comment
+  (info/current-measure)
+  (:key (info/current-measure))
+  (:min (info/current-measure))
+  (:max (info/current-measure))
+  )
+
+
+(defn risk-measure-calculator
+  []
+  [:<>
+   [section2 "Calculate the risk-measure from the baseline risk and the final risk"]
+   [enter :baseline "Enter baseline risk"]])
+
+(defn detail
+  "Choose a detailed view based on menus"
+  []
+  (condp = (:key (info/current-tool))
+    :maths [maths-detail]
+    :calc-final [final-risk-calculator]
+    :calc-measure [risk-measure-calculator]
+    nil (pr-str (:key (info/current-tool)))))
 
 
 (defn master-detail
   []
   [:section
-   {:class "flex flex-row"}
+   {:class "flex md:flex-row flex-col"}
    [:div {:class "w-64"}
     [measures-menu]
-    [action-menu]]
+    [tool-menu]]
    [:div
-    [measures-detail]]])
+    [detail]]])
 
    #_[:div {:class "m-4"}
       "Let the baseline risk be $r$.  The risk in the 'active' group, $p$, depends on the measure of change"

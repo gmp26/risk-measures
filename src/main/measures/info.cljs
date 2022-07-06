@@ -1,10 +1,14 @@
 (ns measures.info
-  (:require [measures.base :refer [page section1 para]]))
+  (:require [measures.db :as db]
+            [measures.base :refer [page section1 para]]))
 
 (def measures
   [{:key :RR
     :name "RR"
     :title "Relative Risk"
+    :min 0
+    :max js/Infinity
+
     :evaluate (fn [r p] 
                 (/ p r))
     :active-risk (fn [r RR] 
@@ -14,14 +18,18 @@
    {:key :PC
     :name "PC"
     :title "Percentage Change"
-    :evaluate (fn [r p] 
+    :min     :min js/Number.NEGATIVE_INFINITY
+    :max     :max js/Infinity
+    :evaluate (fn [r p]
                 (* 100 (- p r)))
-    :active-risk (fn [r PC] 
+    :active-risk (fn [r PC]
                    (+ r (* r (/ PC 100))))
     :maths [para "The final risk is $r + r \\times PC/100$."]}
    {:key :OR
     :name "OR"
     :title "Odds Ratio"
+    :min 0
+    :max js/Infinity
     :evaluate (fn [r p]
                (/ (/ p (- 1 p)) (/ r (- 1 r))))
     :active-risk (fn [r OR]
@@ -33,6 +41,8 @@
    {:key :HR
     :name "HR"
     :title "Hazard Ratio"
+    :min 0
+    :max js/Infinity
     :evaluate (fn [r p]
                 (/ (js/Math.log (- 1 p)) (js/Math.log (- 1 r))))
     :active-risk (fn [r HR]
@@ -48,18 +58,34 @@
 (defn measure-by [key]
   (first ((group-by :key measures) key)))
 
+
+(defn current-measure
+  []
+  (let [selected-measure (:selected-measure @db/state)]
+    (measure-by selected-measure)))
+
+(comment
+  (current-measure))
+
 ;;;;
 
-(def tools
-  [{:key "math"
-    :title "Show formulae"}
-   {:key "final"
-    :title "Calculate a final risk"}
-   {:key "Calculate the risk measure"
-    :title "Show formulae"}])
+(defn tools
+  []
+  [{:key :maths
+    :title "Show the maths"}
+   {:key :calc-final
+    :title "Calculate final risk"}
+   {:key :calc-measure
+    :title (str "Calculate $" (:name (current-measure)) "$")}]
+  )
 
-(defn tools-by [key]
-  (first ((group-by :key tools) key)))
+(defn tool-by [key]
+  (first ((group-by :key (tools)) key)))
+
+(defn current-tool
+  []
+  (let [selected-tool (:selected-tool @db/state)]
+    (tool-by selected-tool)))
 
 (comment
   (def key :RR)
@@ -67,4 +93,6 @@
   (group-by :key measures)
   (measure-by :RR)
   (measure-by :PC)
+
+  (current-tool)
   )

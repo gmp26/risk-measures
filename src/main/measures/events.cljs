@@ -49,6 +49,9 @@
   (select-measure :PC)
   (select-measure nil)
   (selected-measure)
+  (select-tool :maths)
+  (select-tool :calc-final)
+  (select-tool :calc-measure)
   (go-home)
   (go-flash-page)
 
