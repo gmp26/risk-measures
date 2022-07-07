@@ -120,8 +120,8 @@
      [:div (pr-str [(:baseline @db/state) (:measure-value @db/state)])]
      [section2 (str "Calculate the final risk from the baseline risk and the " measure-title)]
      [:span 
-      [enter-percent {:min 0 :max 100 :step 1} :baseline "Enter baseline risk "]
-      [enter {:min 0 :max 1 :step 0.01} :baseline "or as a probability "]
+      #_[enter-percent {:min 0 :max 100 :step 1} :baseline "Enter baseline risk "]
+      [enter {:min 0 :max 1 :step 0.01} :baseline "Enter baseline risk "]
       ]
      [enter {:min (:min measure) :max (:max measure)} :measure-value (str "Enter " measure-title)]
      [:span.ml-4 "The final Risk is "
