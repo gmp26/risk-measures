@@ -8,7 +8,6 @@
 
 (defn render-math
   []
-  (js/console.log "RENDER_MATHS")
   (try (when js/renderMathInElement
          (js/renderMathInElement
           js/document.body

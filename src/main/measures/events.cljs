@@ -1,11 +1,27 @@
 (ns measures.events
   (:require [measures.db :as db]
-            [measures.base :as base]))
+            [measures.base :as base]
+            [measures.info :as info]))
+
+(defn check
+  [errors key new-val]
+  )
+
+(defn baseline-changed [new-val]
+  ;; validate new-val
+  (; recalculate values if possible using this baseline
+
+
+   (swap! db/state assoc :baseline new-val))
+
+  ;; Only change the db if ALL recalculated values are good
+  )
 
 (defn set-db-key
+  "Set a value in the database at the given keyword"
   [key val]
   (swap! db/state assoc key val)
-  )
+   )
 
 (defn select-measure
   "Change the selected measure and kick of a maths re-render.
@@ -38,10 +54,10 @@
 
 
 (defn go-home []
-  (set-db-key :page? :home))
+  (swap! db/state assoc :page? :home))
 
 (defn go-flash-page []
-  (set-db-key :page? :flash))
+  (swap! db/state assoc :page? :flash))
 
 
 (comment

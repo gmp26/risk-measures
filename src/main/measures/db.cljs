@@ -1,12 +1,26 @@
 (ns measures.db
   (:require [reagent.core :as r]))
 
-(defonce state (r/atom {:baseline 0.1
+(def numeric-fields #{:baseline
+                     :RR
+                     :PC
+                     :OR
+                     :HR
+                     :final})
+
+(defonce state (r/atom {:page? :flash
+
+                        :baseline 0.1
+                        :RR 1
+                        :PC 0
+                        :OR 1
+                        :HR 1
                         :final 0.1
+
+                        :errors []
                         :measure-value 1
-                        :sig-figs 2
-                        :page? :flash
                         :selected-measure :RR
+                        :sig-figs 2
                         :selected-tool :maths}))
 
 (defn flash?
@@ -14,7 +28,7 @@
   []
   (= (:page? @state) :flash))
 
-(defn home? 
+(defn home?
   "Must be called from a component"
   []
   (= (:page? @state) :home))
@@ -23,4 +37,4 @@
 (defn final [] (:final @state))
 
 
-  
+

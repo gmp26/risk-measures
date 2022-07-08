@@ -8,6 +8,11 @@
    [medley.core :as medley]
    [clojure.string :as string]))
 
+(defn is-number?
+  "Return true if x is a number"
+  [x]
+  (and (number? x) (not (js/isNaN x))))
+
 (defn measures-menu
   []
   (let [selected-measure (:selected-measure @db/state)
@@ -41,48 +46,67 @@
           (:maths m)]]]])))
 
 
-(defn handler [key]
-  (fn [e]
-    (events/set-db-key key (-> e .-target .-value))))
+(defn maybe-value
+  "return a value or an eror if value is invalid"
+  [ref field new-value]
+  (let [new-value ((if (db/numeric-fields field)
+                     js/Number
+                     identity) new-value)]
+    (if (is-number? new-value)
+      [nil new-value]
+      [field (str new-value " is not a number")])))
 
+
+#_(defn input-error
+      "return an error if new-value cannot be assigned to the ref field,
+       or return a valid replacement"
+      [ref field new-value]
+      (let [[error? value] (maybe-value ref field new-value)]
+        (if error?)))
+
+(defn get-field-change-handler 
+  "Eeturn a change-handler for a field inside ref. The handler inserts the new value into
+   the ref field, or it appends :errors in ref, leaving the field unchanged."
+  [ref field]
+
+  (fn [e]
+    ;(js/console.log field)
+    (-> e .-nativeEvent .preventDefault)
+    (let [new-value (-> e .-target .-value)
+          [err-field good-value :as error] (maybe-value ref field new-value)]
+      ;(js/console.log "err-field " (pr-str err-field))
+      (println [err-field good-value])
+      (if err-field
+        (swap! ref update :errors conj error)
+        (swap! ref assoc field good-value)))))
+
+(defn get-field-value [ref field]
+  (@ref field))
 
 (defn enter
-  ([options key label]
-   #_[:div (pr-str [options key (keyword? key) label])]
-   [:form.m-4.w-full
-    {:on-submit (fn [e] (-> e .-nativeEvent .preventDefault))}
-    [:b [:label {:for (name key)} label ":"]]
-    [:input
-     (medley/deep-merge {:id (name key)
-                         :class "ml-4 text-lg w-20"
-                         :type "number"
-                         :min "0"
-                         :max "1"
-                         :step "0.01"
-                         :value (key @db/state)
-                         :on-change (fn [e] (events/set-db-key key (js/Number (-> e .-target .-value))))}
-                        options)]])
-  ([key label]
-   (enter nil key label)))
+  ([options ref field label]
+   (let [options (medley/deep-merge {:id (name field)
+                                     :class "ml-4 text-lg rounded-lg"
 
-(defn enter-percent
-  ([options key label]
-   #_[:div (pr-str [options key (keyword? key) label])]
-   [:form.m-4.w-full
-    {:on-submit (fn [e] (-> e .-nativeEvent .preventDefault))}
-    [:b [:label {:for (name key)} label ":"]]
-    [:input
-     (medley/deep-merge {:id (name key)
-                         :class "ml-4 text-lg w-20"
-                         :type "number"
-                         :min "0"
-                         :max "1"
-                         :step "0.01"
-                         :value (* 100 (js/Number (key @db/state)))
-                         :on-change (fn [e] (events/set-db-key key (/ (js/Number (-> e .-target .-value)) 100)))}
-                        options)] [:span.text-2xl " %"]])
-  ([key label]
-   (enter nil key label)))
+                                     :style {:width "120px"}
+                                     :type "number"
+                                     :min "0"
+                                     :max "1"
+                                     :step "0.01"
+                                     ;; TODO: deref db/state in caller
+                                     :value (get-field-value ref field)
+                                     :on-change (get-field-change-handler ref field)}
+                                    options)]
+     #_[:b (pr-str "options-ref [options ref]")]
+     [:section.flex.flex-col
+      [:b [:label {:for (name field)} label ":"]]
+      [:input options]
+      (when (:percent? [:span.text-2xl " %"])
+        [:span.text-2xl " %"])]))
+  
+  ([ref field label]
+   (enter nil ref field label)))
+
 
 
 
@@ -110,6 +134,9 @@
                          (:title m)])
                 (info/tools)))]))
 
+(def field :final)
+
+
 (defn final-risk-calculator
   []
   
@@ -119,11 +146,31 @@
     [:section {:class "flex flex-col"}
      [:div (pr-str [(:baseline @db/state) (:measure-value @db/state)])]
      [section2 (str "Calculate the final risk from the baseline risk and the " measure-title)]
-     [:span 
-      #_[enter-percent {:min 0 :max 100 :step 1} :baseline "Enter baseline risk "]
-      [enter {:min 0 :max 1 :step 0.01} :baseline "Enter baseline risk "]
-      ]
-     [enter {:min (:min measure) :max (:max measure)} :measure-value (str "Enter " measure-title)]
+
+     #_[enter-percent {:min 0 :max 100 :step 1} :baseline "Enter baseline risk "]
+     [:div.ml-4 [enter {:min 0 :max 1 :step 0.01}
+                 db/state :baseline "Enter baseline risk "]]
+
+     [:div.ml-4 [enter {:min js/Number.NEGATIVE_INFINITY :max 1 :step 0.01}
+                 db/state :baseline "Enter baseline risk "]]
+     
+
+     [:div.ml-4 [enter {:min js/Number.NEGATIVE_INFINITY :max js/Number.POSITIVE_INFINITY}
+                 db/state :RR (str "Enter " ((info/measure-by :RR) :title))]]
+
+     [:div.ml-4 [enter {:min -100 :max js/Number.POSITIVE_INFINITY}
+                 db/state :PC (str "Enter " ((info/measure-by :PC) :title))]]
+
+     [:div.ml-4 [enter {:min 0 :max js/Number.POSITIVE_INFINITY}
+                 db/state :OR (str "Enter " ((info/measure-by :OR) :title))]]
+
+     [:div.ml-4 [enter {:min 0 :max js/Number.POSITIVE_INFINITY}
+                 db/state :HR (str "Enter " ((info/measure-by :HR) :title))]]
+
+     [:div.ml-4 [enter {:min 0 :max 1}
+                 db/state :final (str "Enter " "Final (absolute) risk")]]
+
+
      [:span.ml-4 "The final Risk is "
       [:b.text-4xl (.toPrecision (js/Number final) 3)]
       " or "
@@ -143,7 +190,9 @@
   []
   [:<>
    [section2 "Calculate the risk-measure from the baseline risk and the final risk"]
-   [enter :baseline "Enter baseline risk"]])
+   [:form.m-4.w-full
+    {:on-submit (fn [e] (-> e .-nativeEvent .preventDefault))}
+    [enter db/state :baseline "Enter baseline risk"]]])
 
 (defn detail
   "Choose a detailed view based on menus"
@@ -154,6 +203,15 @@
     :calc-measure [risk-measure-calculator]
     nil (pr-str (:key (info/current-tool)))))
 
+(defn error-report
+  "Render any errors"
+  []
+  (when-let [errors (seq (:errors @db/state))]
+    (into [:section] 
+          (map (fn [err]
+                 [:div (pr-str err)])
+               errors)))
+  )
 
 (defn master-detail
   []
@@ -161,7 +219,8 @@
    {:class "flex md:flex-row flex-col"}
    [:div {:class "w-64"}
     [measures-menu]
-    [tool-menu]]
+    [tool-menu]
+    [error-report]]
    [:div
     [detail]]])
 
