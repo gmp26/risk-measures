@@ -7,7 +7,7 @@
     :name "RR"
     :title "Relative Risk"
     :min 0
-    :max js/Infinity
+    :max js/Number.POSITIVE_INFINITY
 
     :evaluate (fn [r p] 
                 (/ p r))
@@ -19,7 +19,7 @@
     :name "PC"
     :title "Percentage Change"
     :min     :min js/Number.NEGATIVE_INFINITY
-    :max     :max js/Infinity
+    :max     :max js/Number.POSITIVE_INFINITY
     :evaluate (fn [r p]
                 (* 100 (- p r)))
     :active-risk (fn [r PC]
@@ -29,7 +29,7 @@
     :name "OR"
     :title "Odds Ratio"
     :min 0
-    :max js/Infinity
+    :max js/Number.POSITIVE_INFINITY
     :evaluate (fn [r p]
                (/ (/ p (- 1 p)) (/ r (- 1 r))))
     :active-risk (fn [r OR]
@@ -74,9 +74,7 @@
   [{:key :maths
     :title "Show the maths"}
    {:key :calc-final
-    :title "Final risk calculator"}
-   {:key :calc-measure
-    :title (str (:title (current-measure)) " calculator")}]
+    :title "Final risk calculator"}]
   )
 
 (defn tool-by [key]

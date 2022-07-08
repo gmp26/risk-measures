@@ -17,10 +17,10 @@
   []
   (let [selected-measure (:selected-measure @db/state)
         selected? (fn [m] (= (:key m) selected-measure))]
-    [:div {:class "border border-gray-600 m-4 p-4 rounded-md w-60 shadow-lg"}
+    [:div {:class "border border-gray-600 m-4 p-4 rounded-md w-72 shadow-lg"}
      [:span "Choose a measure"]
      (into [:ul.mx-2.w-100%
-            {:class "sm:w-1/8"}]
+            #_{:class "sm:w-1/8"}]
            (map (fn [m] [:li {:class (str "px-2 py-2  w-full"
                                           " cursor-pointer "
                                           (if (selected? m)
@@ -107,15 +107,9 @@
   ([ref field label]
    (enter nil ref field label)))
 
-
-
-
-
-
 (defn tool-button
   [label]
   [base/button-primary {:class "w-full p-2"} label])
-
 
 (defn tool-menu
   []
@@ -137,47 +131,32 @@
 (def field :final)
 
 
-(defn final-risk-calculator
+(defn status
   []
   
   (let [measure (info/current-measure)
         final (js/Number ((:active-risk measure) (:baseline @db/state) (:measure-value @db/state)))
         measure-title (string/lower-case (:title measure))]
-    [:section {:class "flex flex-col"}
-     [:div (pr-str [(:baseline @db/state) (:measure-value @db/state)])]
-     [section2 (str "Calculate the final risk from the baseline risk and the " measure-title)]
+    [:section.w-72 {:class "flex flex-col"}
+     [section2 (str "Currently")]
+     [:p.ml-4 "The baseline risk is " (:baseline @db/state)]
+     [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :RR))) " is ") (:RR @db/state)]
+     [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :PC))) " is ") (:baseline @db/state)]
+     [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :OR))) " is ") (:baseline @db/state)]
+     [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :HR))) " is ") (:baseline @db/state)]
+     [:p.ml-4 "So the final risk is " (:final @db/state)]
 
-     #_[enter-percent {:min 0 :max 100 :step 1} :baseline "Enter baseline risk "]
-     [:div.ml-4 [enter {:min 0 :max 1 :step 0.01}
-                 db/state :baseline "Enter baseline risk "]]
-
-     [:div.ml-4 [enter {:min js/Number.NEGATIVE_INFINITY :max 1 :step 0.01}
-                 db/state :baseline "Enter baseline risk "]]
-     
-
-     [:div.ml-4 [enter {:min js/Number.NEGATIVE_INFINITY :max js/Number.POSITIVE_INFINITY}
-                 db/state :RR (str "Enter " ((info/measure-by :RR) :title))]]
-
-     [:div.ml-4 [enter {:min -100 :max js/Number.POSITIVE_INFINITY}
-                 db/state :PC (str "Enter " ((info/measure-by :PC) :title))]]
-
-     [:div.ml-4 [enter {:min 0 :max js/Number.POSITIVE_INFINITY}
-                 db/state :OR (str "Enter " ((info/measure-by :OR) :title))]]
-
-     [:div.ml-4 [enter {:min 0 :max js/Number.POSITIVE_INFINITY}
-                 db/state :HR (str "Enter " ((info/measure-by :HR) :title))]]
-
-     [:div.ml-4 [enter {:min 0 :max 1}
-                 db/state :final (str "Enter " "Final (absolute) risk")]]
+    
 
 
-     [:span.ml-4 "The final Risk is "
-      [:b.text-4xl (.toPrecision (js/Number final) 3)]
-      " or "
-      [:b.text-4xl (.toFixed (js/Number (* final 100)) 0) "%"]
+     #_[:span.ml-4 "The final Risk is "
+        [:b.text-4xl (.toPrecision (js/Number final) 3)]
+        " or "
+        [:b.text-4xl (.toFixed (js/Number (* final 100)) 0) "%"]
 
-      #_(.toPrecision (js/Number ((:active-risk measure) (:baseline @db/state) (:measure-value @db/state)))
-                      2)]]))
+        #_(.toPrecision (js/Number ((:active-risk measure) (:baseline @db/state) (:measure-value @db/state)))
+                        2)]]))
+
 (comment
   (info/current-measure)
   (:key (info/current-measure))
@@ -194,14 +173,6 @@
     {:on-submit (fn [e] (-> e .-nativeEvent .preventDefault))}
     [enter db/state :baseline "Enter baseline risk"]]])
 
-(defn detail
-  "Choose a detailed view based on menus"
-  []
-  (condp = (:key (info/current-tool))
-    :maths [maths-detail]
-    :calc-final [final-risk-calculator]
-    :calc-measure [risk-measure-calculator]
-    nil (pr-str (:key (info/current-tool)))))
 
 (defn error-report
   "Render any errors"
@@ -213,41 +184,36 @@
                errors)))
   )
 
+
+(defn inputs-panel
+  "Summarise the calculation"
+  []
+  (let [measure (info/current-measure)]
+    [:<>
+     [:section.flex.flex-col.md:flex-eow
+
+      [:section.mt-4
+       [:div.ml-4 [enter {:min 0 :max 1 :step 0.01}
+                   db/state :baseline "Baseline risk "]]
+
+       [:div.ml-4 [enter {:min (:min measure) :max (:max measure) :step 0.01}
+                   db/state (:key measure) (:title measure)]]
+
+       [:div.ml-4 [enter {:min 0 :max 1}
+                   db/state :final "Final (absolute) risk"]]]]]))
+
 (defn master-detail
   []
   [:section
    {:class "flex md:flex-row flex-col"}
    [:div {:class "w-64"}
-    [measures-menu]
-    [tool-menu]
     [error-report]]
-   [:div
-    [detail]]])
-
-   #_[:div {:class "m-4"}
-      "Let the baseline risk be $r$.  The risk in the 'active' group, $p$, depends on the measure of change"
-      [:ul
-       [:li {:class "m-4"}
-        [:b "Relative risk $RR$."]
-        [para
-         "By definition, $RR = p/r$.  So the final risk is $p = r \\times RR$."]]
-       [:li {:class "m-4"}
-        [:b "Percentage change $PC$."]
-        [para
-         "The final risk is $r + r \\times PC/100$."]]
-       [:li {:class "m-4"}
-        [:b "Odds ratio  $OR$."]
-        [para
-         "By definition, $OR = \\frac{p}{(1-p)} / \\frac{r}{(1-r)}$."]
-        [para "Solving gives $p = 1- \\frac{1}{(1+ OR(1-r)/r)}$."]]
-       [:li {:class "m-4"}
-        [:b "Hazard ratio  $HR$."]
-        [para "By definition, $HR = h_1(t)/h_0(t)$, where $h_1(t), h_0(t)$ are the hazards in the 'active' and baseline groups respectively. "]
-        [para "Therefore $HR = H_1(t)/H_0(t)$, where $H_1(t), H_0(t)$ are the cumulative hazards. "]
-        [para "Now $H_1(t) = -\\log S_1(t), H_0(t) = -\\log S_0(t)$, where $S_1(t), S_0(t)$ are the survival probabilities.   "]
-        [para "And so $HR = \\log S_1(t)/ \\log S_0(t).$"]
-        [para "For a specified follow-up time $t$, we have risks $p = 1- S_1(t)$, $r = 1- S_0(t)$, and so $HR = \\log (1-p) / \\log (1-r)$."]
-        [para "Rearranging gives  $p = 1 - (1-r)^{HR}$."]]]]
+   [:div.flex.flex-col
+    [:div.flex.flex-col.sm:flex-row
+     [measures-menu]
+     [inputs-panel]
+     [status]]
+    [maths-detail]]])
 
 
 (defn intro
