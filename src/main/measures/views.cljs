@@ -202,6 +202,7 @@
        [:div.ml-4 [enter {:min 0 :max 1}
                    db/state :final "Final (absolute) risk"]]]]]))
 
+
 (defn master-detail
   []
   [:section
