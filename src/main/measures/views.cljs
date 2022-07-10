@@ -142,8 +142,30 @@
           (log-error ref field error)
           (swap! ref assoc field good-value))))))
 
-(defn get-field-value [ref field]
-  (@ref field))
+(comment
+  (def ref db/state)
+  (def field :RR)
+  (.toFixed (js/Number 0.5) 2)
+  )
+
+(defn dps-from-step
+  [step]
+  (- (js/Math.log10 step)))
+
+(defn get-field-value
+  "Evaluate a field to configured precision"
+  [ref field]
+    (-> @ref
+        field
+        (js/Number.
+         (.toFixed (if (#{:baseline :final} field)
+                     3
+                     (dps-from-step
+                      (-> @ref field :step)))))))
+
+(comment
+  (-> @db/state :baseline :step)
+  )
 
 (defn enter
   "enter a labelled field value to ref in a form"
@@ -244,13 +266,14 @@
   (let [measure (info/current-measure)
         delta info/delta]
     [:<>
-     [:section.flex.flex-col.md:flex-eow
+     [:section.flex.flex-col.md:flex-eow 
 
-      [:section.mt-2
+      [:form.mt-2
+       {:no-validate false}
        [:div [enter {:min delta :max 1 :step delta}
                    db/state :baseline "Baseline risk "]]
 
-       [:div [enter {:min (:min measure) :max (:max measure) :step 0.01}
+       [:div [enter {:min (:min measure) :max (:max measure) :step (:step measure)}
                    db/state (:key measure) (:title measure)]]
 
        [:div [enter {:min delta :max 1 :step delta}

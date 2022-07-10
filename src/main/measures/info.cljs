@@ -3,7 +3,7 @@
             [measures.base :refer [page section1 para]]))
 
 (def delta 
-  "Our precision for any absolute risk"
+  "Our precision for any baseline or absolute risk"
   0.01)
 
 ;;
@@ -36,6 +36,7 @@
     :title "Relative Risk"
     :min 0
     :max js/Number.POSITIVE_INFINITY
+    :step 0.01
 
     :evaluate (fn [r p] 
                 (/ p r))
@@ -48,6 +49,7 @@
     :title "Percentage Change"
     :min     :min js/Number.NEGATIVE_INFINITY
     :max     :max js/Number.POSITIVE_INFINITY
+    :step 1
     :evaluate (fn [r p]
                 (* 100 (- p r)))
     :active-risk (fn [r PC]
@@ -58,6 +60,7 @@
     :title "Odds Ratio"
     :min 0
     :max js/Number.POSITIVE_INFINITY
+    :step 0.01
     :evaluate (fn [r p]
                (/ (/ p (- 1 p)) (/ r (- 1 r))))
     :active-risk (fn [r OR]
@@ -71,6 +74,7 @@
     :title "Hazard Ratio"
     :min 0
     :max js/Number.POSITIVE_INFINITY
+    :step 0.01
     :evaluate (fn [r p]
                 (/ (js/Math.log (- 1 p)) (js/Math.log (- 1 r))))
     :active-risk (fn [r HR]
