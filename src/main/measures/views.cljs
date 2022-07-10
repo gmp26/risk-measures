@@ -45,6 +45,13 @@
          [:li.m-4
           (:maths m)]]]])))
 
+(defn max-relative-risk
+  "maximum relative risk"
+  [baseline final]
+  (if (and baseline (pos? final))
+    (/ baseline final)
+    (js/Number.POSITIVE_INFINITY)))
+
 
 (defn maybe-value
   "return a value or an eror if value is invalid"
@@ -54,7 +61,14 @@
                      identity) new-value)]
     (if (is-number? new-value)
       [nil new-value]
-      [field (str new-value " is not a number")])))
+      [field (str new-value " is not a number")])
+
+    ;; is a number (it will be)
+    ;; in-range (it will be if we keep min and max up to date?)
+    ;; calculate final
+    ;; is final in-range [0-1]
+    ;; update ranges given baseline
+    ))
 
 
 #_(defn input-error
@@ -64,6 +78,50 @@
       (let [[error? value] (maybe-value ref field new-value)]
         (if error?)))
 
+(defn log-error 
+  [ref field error]
+  (swap! ref update :errors conj {:field field :error error}))
+
+(defn new-baseline
+  [ref new-val]
+  {:pre [(pos? new-val)]}
+  new-val)
+
+(comment
+  (new-baseline (atom {}) -1)
+  )
+
+(defn new-rr
+  [ref new-val]
+  )
+
+(defn new-final
+  [ref new-val])
+
+#_(defn new-rr
+  "The final or baseline was changed by user, so recalculate the rest"
+  [ref field new-val]
+
+  (let [rr (let [[numerator denominator]
+                 (if (= field :baseline)
+                   [(:final @ref) new-val]
+                   [new-val (:baseline @ref)])]
+             (if (pos? denominator)
+               (/ numerator denominator)))]))
+
+
+#_(defn recalculate-on-value-change
+  "The value in field has changed - we need to recalculate the rest.
+   We ignore obvious errors here - they will be indicated in the display"
+  [ref field]
+  (condp = field)
+  :baseline 
+  :RR
+  :PC
+  :OR
+  :HR
+  :final)
+
 (defn get-field-change-handler 
   "Eeturn a change-handler for a field inside ref. The handler inserts the new value into
    the ref field, or it appends :errors in ref, leaving the field unchanged."
@@ -72,18 +130,23 @@
   (fn [e]
     ;(js/console.log field)
     (-> e .-nativeEvent .preventDefault)
-    (let [new-value (-> e .-target .-value)
-          [err-field good-value :as error] (maybe-value ref field new-value)]
+    (let [new-value (-> e .-target .-value)]
+      ;; if the baseline or final value have changed, we need to update the db in a big way
+      #_(when (#{:baseline :final} field)
+            (is-number? new-value)
+            (revise-ref ref field new-value))
+      (let [[err-field good-value :as error] (maybe-value ref field new-value)]
       ;(js/console.log "err-field " (pr-str err-field))
-      (println [err-field good-value])
-      (if err-field
-        (swap! ref update :errors conj error)
-        (swap! ref assoc field good-value)))))
+        (println [err-field good-value])
+        (if err-field
+          (log-error ref field error)
+          (swap! ref assoc field good-value))))))
 
 (defn get-field-value [ref field]
   (@ref field))
 
 (defn enter
+  "enter a labelled field value to ref in a form"
   ([options ref field label]
    (let [options (medley/deep-merge {:id (name field)
                                      :class "ml-4 text-lg rounded-lg"
@@ -98,7 +161,7 @@
                                      :on-change (get-field-change-handler ref field)}
                                     options)]
      #_[:b (pr-str "options-ref [options ref]")]
-     [:section.flex.flex-col
+     [:section.flex.flex-col.mb-1
       [:b [:label {:for (name field)} label ":"]]
       [:input options]
       (when (:percent? [:span.text-2xl " %"])
@@ -165,15 +228,6 @@
   )
 
 
-(defn risk-measure-calculator
-  []
-  [:<>
-   [section2 "Calculate the risk-measure from the baseline risk and the final risk"]
-   [:form.m-4.w-full
-    {:on-submit (fn [e] (-> e .-nativeEvent .preventDefault))}
-    [enter db/state :baseline "Enter baseline risk"]]])
-
-
 (defn error-report
   "Render any errors"
   []
@@ -184,22 +238,22 @@
                errors)))
   )
 
-
 (defn inputs-panel
   "Summarise the calculation"
   []
-  (let [measure (info/current-measure)]
+  (let [measure (info/current-measure)
+        delta info/delta]
     [:<>
      [:section.flex.flex-col.md:flex-eow
 
-      [:section.mt-4
-       [:div.ml-4 [enter {:min 0 :max 1 :step 0.01}
+      [:section.mt-2
+       [:div [enter {:min delta :max 1 :step delta}
                    db/state :baseline "Baseline risk "]]
 
-       [:div.ml-4 [enter {:min (:min measure) :max (:max measure) :step 0.01}
+       [:div [enter {:min (:min measure) :max (:max measure) :step 0.01}
                    db/state (:key measure) (:title measure)]]
 
-       [:div.ml-4 [enter {:min 0 :max 1}
+       [:div [enter {:min delta :max 1 :step delta}
                    db/state :final "Final (absolute) risk"]]]]]))
 
 
@@ -207,7 +261,7 @@
   []
   [:section
    {:class "flex md:flex-row flex-col"}
-   [:div {:class "w-64"}
+   #_[:div {:class "w-64"}
     [error-report]]
    [:div.flex.flex-col
     [:div.flex.flex-col.sm:flex-row

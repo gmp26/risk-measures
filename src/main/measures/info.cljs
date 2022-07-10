@@ -2,6 +2,34 @@
   (:require [measures.db :as db]
             [measures.base :refer [page section1 para]]))
 
+(def delta 
+  "Our precision for any absolute risk"
+  0.01)
+
+;;
+;; In the following calculations, r is the baseline risk and p is the final risk
+;;
+
+(defn RR-from-r-p
+  "Find Relative Risk from baseline and final"
+  [r p]
+  (if (pos? r)
+    (/ p r)
+    (if (zero? r)
+      1
+      (js/Number.POSITIVE_INFINITY))))
+
+(defn p-from-r-rr
+  "Find final from baseline and RR"
+  [r RR]
+  )
+
+(defn calc-PC
+    "Find Percentage Change from baseline and final"
+  [r p]
+
+  )
+
 (def measures
   [{:key :RR
     :name "RR"
@@ -42,7 +70,7 @@
     :name "HR"
     :title "Hazard Ratio"
     :min 0
-    :max js/Infinity
+    :max js/Number.POSITIVE_INFINITY
     :evaluate (fn [r p]
                 (/ (js/Math.log (- 1 p)) (js/Math.log (- 1 r))))
     :active-risk (fn [r HR]
