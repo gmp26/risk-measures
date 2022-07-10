@@ -67,11 +67,25 @@
 
   (r-OR->p 0.1 1.227272727272727)
   ;; => 0.12000000000000001
-
-
 )
 ;---
+(defn r-p->HR
+  [r p]
+  (/ (js/Math.log (- 1 p)) (js/Math.log (- 1 r))))
+
+(defn r-HR->p
+  [r HR]
+  (- 1 (js/Math.pow (- 1 r) HR)))
+
+(comment
+  (r-p->HR 0.1 0.12)
+  ;; => 1.2132948544504327
+
+  (r-HR->p 0.1 1.2132948544504327)
+  ;; => 0.12
+  )
 ;---
+
 (def measures
   [{:key :RR
     :name "RR"
@@ -117,10 +131,8 @@
     :min 0
     :max js/Number.POSITIVE_INFINITY
     :step 0.01
-    :evaluate (fn [r p]
-                (/ (js/Math.log (- 1 p)) (js/Math.log (- 1 r))))
-    :active-risk (fn [r HR]
-                   (- 1 (js/Math.pow (- 1 r) HR)))
+    :evaluate r-p->HR
+    :active-risk r-HR->p
     :maths [:<>
             [para "By definition, $HR = h_1(t)/h_0(t)$, where $h_1(t), h_0(t)$ are the hazards in the 'active' and baseline groups respectively. "]
             [para "Therefore $HR = H_1(t)/H_0(t)$, where $H_1(t), H_0(t)$ are the cumulative hazards. "]
