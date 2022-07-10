@@ -10,26 +10,68 @@
 ;; In the following calculations, r is the baseline risk and p is the final risk
 ;;
 
-(defn RR-from-r-p
+;--- RR
+(defn r-p->RR
   "Find Relative Risk from baseline and final"
   [r p]
-  (if (pos? r)
-    (/ p r)
-    (if (zero? r)
-      1
-      (js/Number.POSITIVE_INFINITY))))
-
-(defn p-from-r-rr
+  (/ p r)
+)
+(defn r-RR->p
   "Find final from baseline and RR"
   [r RR]
-  )
+  (* r RR))
 
-(defn calc-PC
-    "Find Percentage Change from baseline and final"
+(comment
+  (r-p->RR 0.1 0.12)
+  ;; => 1.2
+
+  (r-RR->p 0.1 1.2)
+  ;; => 0.12
+  )
+;--- PC
+(defn r-p->PC
+  "Find PCk from baseline and final"
   [r p]
+  (* 100 (- (/ p r) 1)))
+(defn r-PC->p
+  [r PC]
+  (+ r (* r (/ PC 100))))
 
+(comment
+  (r-p->PC 0.1 0.12)
+  ;; => 19.999999999999996
+
+  (r-PC->p 0.1 20)
+  ;; => 0.12000000000000001
   )
 
+;---OR
+(defn r-p->OR
+  [r p]
+  (/ (/ p (- 1 p)) (/ r (- 1 r))))
+
+(defn r-OR->p
+  [r OR]
+  #_(/ 1 (* OR r (/ 1 (- 1 r))))
+  (- 1 (/ 1 (+ 1 (* OR r (/ 1 (- 1 r)) ))))
+  #_(let [mu (* OR (/ r (- 1 r)))]
+    (/ mu (inc mu))))
+
+#_(defn r-OR->p
+  [r OR]
+  (/ (* r OR) (+ (* r (- r)) OR)))
+
+(comment 
+  (r-p->OR 0.1 0.12)
+  ;; => 1.227272727272727
+
+  (r-OR->p 0.1 1.227272727272727)
+  ;; => 0.12000000000000001
+
+
+)
+;---
+;---
 (def measures
   [{:key :RR
     :name "RR"
@@ -38,37 +80,37 @@
     :max js/Number.POSITIVE_INFINITY
     :step 0.01
 
-    :evaluate (fn [r p] 
-                (/ p r))
-    :active-risk (fn [r RR] 
-                   (* r RR))
-    :maths [para
-            "By definition, $RR = p/r$.  So the final risk is $p = r \\times RR$."]}
+    :evaluate r-p->RR
+    :active-risk r-RR->p
+    :maths [:<>
+            [para
+             "By definition, $$RR = \\frac{p}{r}$$."]
+            [para "So the final risk is $$p = r \\times RR$$."]]}
    {:key :PC
     :name "PC"
     :title "Percentage Change"
     :min     :min js/Number.NEGATIVE_INFINITY
     :max     :max js/Number.POSITIVE_INFINITY
     :step 1
-    :evaluate (fn [r p]
-                (* 100 (- p r)))
-    :active-risk (fn [r PC]
-                   (+ r (* r (/ PC 100))))
-    :maths [para "The final risk is $r + r \\times PC/100$."]}
+    :evaluate r-p->PC
+    :active-risk r-PC->p
+    :maths [:<>
+           [para "By definition: $PC$ is the change in risk
+                   expressed as a percentage $$\\frac{p - r}{r} \\times 100 %$$"] 
+            [para "So the final risk is $$r + r \\times PC/100$$."]
+            ]}
    {:key :OR
     :name "OR"
     :title "Odds Ratio"
     :min 0
     :max js/Number.POSITIVE_INFINITY
     :step 0.01
-    :evaluate (fn [r p]
-               (/ (/ p (- 1 p)) (/ r (- 1 r))))
-    :active-risk (fn [r OR]
-                   (- 1 (/ 1 (+ 1 (* OR (- 1 r (/ 1 r)))))))
+    :evaluate r-p->OR
+    :active-risk r-OR->p
     :maths [:<>
             [para
-             "By definition, $OR = \\frac{p}{(1-p)} / \\frac{r}{(1-r)}$."]
-            [para "Solving gives $p = 1- \\frac{1}{(1+ OR(1-r)/r)}$."]]}
+             "By definition, $$OR = \\frac{p}{(1-p)} / \\frac{r}{(1-r)}$$."]
+            [para "Solving gives $$p = 1 - \\frac{1}{1+ OR \\frac{r}{(1-r)}}$$."]]}
    {:key :HR
     :name "HR"
     :title "Hazard Ratio"

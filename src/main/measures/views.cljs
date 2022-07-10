@@ -269,7 +269,7 @@
      [:section.flex.flex-col.md:flex-eow 
 
       [:form.mt-2
-       {:no-validate false}
+       #_{:no-validate true}
        [:div [enter {:min delta :max 1 :step delta}
                    db/state :baseline "Baseline risk "]]
 
