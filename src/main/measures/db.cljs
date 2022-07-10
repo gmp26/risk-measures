@@ -8,7 +8,7 @@
                      :HR
                      :final})
 
-(defonce state (r/atom {:page? :flash
+(def state (r/atom {:page? :flash
 
                         :baseline 0.1
                         :RR 1
