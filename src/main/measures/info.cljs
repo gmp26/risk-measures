@@ -126,8 +126,8 @@
             [para "Therefore $HR = H_1(t)/H_0(t)$, where $H_1(t), H_0(t)$ are the cumulative hazards. "]
             [para "Now $H_1(t) = -\\log S_1(t), H_0(t) = -\\log S_0(t)$, where $S_1(t), S_0(t)$ are the survival probabilities.   "]
             [para "And so $HR = \\log S_1(t)/ \\log S_0(t).$"]
-            [para "For a specified follow-up time $t$, we have risks $p = 1- S_1(t)$, $r = 1- S_0(t)$, and so $HR = \\log (1-p) / \\log (1-r)$."]
-            [para "Rearranging gives  $p = 1 - (1-r)^{HR}$."]]}])
+            [para "For a specified follow-up time $t$, we have risks $p = 1- S_1(t)$, $r = 1- S_0(t)$, and so $$HR = \\frac{\\log (1-p)}{\\log (1-r)}$$."]
+            [para "Rearranging gives  $$p = 1 - (1-r)^{HR}$$."]]}])
 
 (defn measure-by [key]
   (first ((group-by :key measures) key)))
