@@ -17,8 +17,8 @@
   []
   (let [selected-measure (:selected-measure @db/state)
         selected? (fn [m] (= (:key m) selected-measure))]
-    [:div {:class "border border-gray-600 m-4 p-4 rounded-md w-72 shadow-lg"}
-     [:span "Choose a measure"]
+    [:div {:class "border border-gray-600 m-4 p-2 rounded-md w-72 bg-white shadow-lg"}
+     [:span [:b "Choose a measure"]]
      (into [:ul.mx-2.w-100%
             #_{:class "sm:w-1/8"}]
            (map (fn [m] [:li {:class (str "px-2 py-2  w-full"
@@ -283,7 +283,8 @@
   []
   (let [selected-tool (:selected-tool @db/state)
         selected? (fn [m] (= (:key m) selected-tool))]
-    [:div {:class "shadow-lg border border-gray-600 m-4 p-4 rounded-md w-60"}
+    [:div {:class "shadow-lg border border-gray-600  m-4 p-4 rounded-md w-60"
+           :style {:background-color "#fff"}}
      [:span "Choose a tool"]
      (into [:ul.mx-2.w-100%
             {:class "sm:w-1/8"}]
@@ -305,9 +306,10 @@
   (let [measure (info/current-measure)
         final (js/Number ((:calc-final measure) (:baseline @db/state) (:measure-value @db/state)))
         measure-title (string/lower-case (:title measure))]
-    [:section.w-72 {:class "flex flex-col"}
-     [section2 (str "Currently")]
-     [:p.ml-4 "The baseline risk is " (:baseline @db/state)]
+    [:section {:class "ml-4 mt-2 first-letter:flex flex-col w-auto min-w-80"}
+     ;[section2 (str "Currently")]
+     [:b (str "Status")]
+     [:p.ml-4 "The baseline risk is " (safe (:baseline @db/state) 3) " or "  (safe (* 100 (:baseline @db/state)) 1) "%"]
      [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :RR))) " is ") (:RR @db/state)]
      [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :PC))) " is ") (:PC @db/state)]
      [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :OR))) " is ") (:OR @db/state)]
@@ -342,7 +344,7 @@
     [:<>
      [:section.flex.flex-col.md:flex-eow 
 
-      [:form.mt-2
+      [:form.mt-2.ml-4
        #_{:no-validate true}
        [:div [enter {:min delta :max (- 1 delta) :step delta}
                    db/state :baseline "Baseline risk "]]
@@ -361,7 +363,7 @@
    #_[:div {:class "w-64"}
     [error-report]]
    [:div.flex.flex-col
-    [:div.flex.flex-col.sm:flex-row
+    [:div.flex.flex-col.sm:flex-row.bg-slate-200
      [measures-menu]
      [inputs-panel]
      [status]]
@@ -384,7 +386,7 @@
      " Depending on context, you may encounter Relative Risks, Percentage Changes, Odds Ratios, or Hazard Ratios. "]
     [para [:span.text-base "The maths differs in each case, but the final real risk
             is always determined by applying the relative risk measurement to the baseline risk."]]
-    [para [:i "Here, we provide calculators and definitions for each of these risk measure."]]]
+    [para [:i "Here, we provide calculators and definitions for each of these risk measures."]]]
    #_[para [:b.text-blue-400 "Choose a risk measure to continue:"]]])
 
 
@@ -410,7 +412,7 @@
 (defn home []
   [:<>
    [master-detail]
-   [:section.flex.justify-centre.w-full.m-4
+   [:section.flex.justify-centre.space-around;.w-full.m-4
     [button-primary {:on-click events/go-flash-page} "Home"]
     [spacer]
     [button-secondary-link {:href "https://realrisk.wintoncentre.uk/"
