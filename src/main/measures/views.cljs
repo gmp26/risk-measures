@@ -55,12 +55,13 @@
 (comment
   
   (def measure (info/current-measure)
-               ;; => {:min 0, :evaluate #object[measures$info$r_p__GT_RR], :key :RR, :maths [:<> [#object[measures$base$para] "By definition, $$RR = \\frac{p}{r}$$."] [#object[measures$base$para] "So the final risk is $$p = r \\times RR$$."]], :name "RR", :title "Relative Risk", :max ##Inf, :step 0.01, :active-risk #object[measures$info$r_RR__GT_p]}
+               ;; => {:min 0, :evaluate #object[measures$info$r_p__GT_RR], :key :RR, :maths [:<> [#object[measures$base$para] "By definition, $$RR = \\frac{p}{r}$$."] [#object[measures$base$para] "So the final risk is $$p = r \\times RR$$."]], :name "RR", :title "Relative Risk", :max ##Inf, :step 0.01, :calc-final #object[measures$info$r_RR__GT_p]}
 )
   (def new-value 0.11)
   (def ref db/state)
   (def field :baseline)
   (info/r-RR->p 0.11 1)
+  (-> @ref measure)
   )
 
 (defn update-all-measures
@@ -73,57 +74,75 @@
          :HR (info/r-p->HR r p)))
 
 (defn maybe-value
-  "return a value or an eror if value is invalid"
+  "return a value or an eror if value is invalid.
+   Type=\"number\" inputs eliminate most (al?) typed entry errors, but some can arise
+   from applying the formulae."
   [ref field new-value]
   (let [measure (info/current-measure)
         new-value ((if (db/numeric-fields field)
                      js/Number
                      identity) new-value)]
     #_(if (is-number? new-value)
-      [nil new-value]
-      [field (str new-value " is not a number")])
-    
+        [nil new-value]
+        [field (str new-value " is not a number")])
+
     (cond
-      (= field :baseline) (do
-                            ;; r-RR->p
-                            (js/console.log "r-RR->p " new-value
-                                            (@ref (:key measure)))
-                            
-                            ;; TODO make all updates atomic
-                            (swap! ref assoc :final ((:active-risk measure)
+      (= field :baseline) (let [r new-value
+                                ;p (:final @ref)
+                                p ((:calc-final measure)
+                                   new-value
+                                   (@ref (:key measure)))]
+
+                            ;; r-XX->p
+                            (js/console.log (str "r-" (:name measure) "->p ")
+                                            r (@ref (:key measure)))
+
+                            ;; update the final field using the current measure.
+
+                            (swap! ref assoc :final ((:calc-final measure)
                                                      new-value
                                                      (@ref (:key measure))))
-                            ;; TODO: Update the OTHER measure fields
-                            :RR (update-all-measures ref (:baseline @ref) (:final @ref))
+
+                            ;; recalculate all measures
+                            (swap! ref assoc
+                                   :final p
+                                   :RR (info/r-p->RR r p)
+                                   :PC (info/r-p->PC r p)
+                                   :OR (info/r-p->OR r p)
+                                   :HR (info/r-p->HR r p))
+                            (info/r-p->RR (:baseline @ref) (:final @ref))
                             [nil new-value])
+
       (= field :final) (do
                          ;; TODO
                          ;; do r-p->measure-field for all measure-fields
                          (js/console.log "r-p->RR " new-value
                                          (@ref (:key measure)))
-                         (swap! ref assoc (:key measure)
-                                ((:active-risk measure)
-                                 (@ref (:key measure))
-                                 new-value
-                                 ))
+
+                         #_(swap! ref assoc (:key measure)
+                                  ((:calc-final measure)
+                                   (@ref (:key measure))
+                                   new-value))
+
                          ;; UPDATE the OTHER measure fields
+                         (info/r-p->RR (:baseline @ref) (:final @ref))
                          [nil new-value])
       :else (do
               ;; The measure field has changed
               (js/console.log "r-RR->p " new-value
                               (@ref (:key measure)))
-              (swap! ref assoc :final ((:active-risk measure)
+              (swap! ref assoc :final ((:calc-final measure)
                                        new-value
                                        (@ref (:key measure))))
               [nil new-value])
-      nil ["bad field" 0.1])
+      ))
     
     ;; is a number (it will be)
     ;; in-range (it will be if we keep min and max up to date?)
     ;; calculate final
     ;; is final in-range [0-1]
     ;; update ranges given baseline
-    ))
+    )
 
 
 #_(defn input-error
@@ -271,7 +290,7 @@
   []
   
   (let [measure (info/current-measure)
-        final (js/Number ((:active-risk measure) (:baseline @db/state) (:measure-value @db/state)))
+        final (js/Number ((:calc-final measure) (:baseline @db/state) (:measure-value @db/state)))
         measure-title (string/lower-case (:title measure))]
     [:section.w-72 {:class "flex flex-col"}
      [section2 (str "Currently")]
@@ -290,7 +309,7 @@
         " or "
         [:b.text-4xl (.toFixed (js/Number (* final 100)) 0) "%"]
 
-        #_(.toPrecision (js/Number ((:active-risk measure) (:baseline @db/state) (:measure-value @db/state)))
+        #_(.toPrecision (js/Number ((:calc-final measure) (:baseline @db/state) (:measure-value @db/state)))
                         2)]]))
 
 (comment

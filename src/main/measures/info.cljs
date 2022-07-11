@@ -43,6 +43,7 @@
 
   (r-PC->p 0.1 20)
   ;; => 0.12000000000000001
+
   )
 
 ;---OR
@@ -95,7 +96,7 @@
     :step 0.01
 
     :evaluate r-p->RR
-    :active-risk r-RR->p
+    :calc-final r-RR->p
     :maths [:<>
             [para
              "By definition, $$RR = \\frac{p}{r}$$."]
@@ -107,10 +108,10 @@
     :max     :max js/Number.POSITIVE_INFINITY
     :step 1
     :evaluate r-p->PC
-    :active-risk r-PC->p
+    :calc-final r-PC->p
     :maths [:<>
            [para "By definition: $PC$ is the change in risk
-                   expressed as a percentage $$\\frac{p - r}{r} \\times 100 %$$"] 
+                   expressed as a percentage $$\\frac{p - r}{r} \\times 100 \\ \\%$$"] 
             [para "So the final risk is $$r + r \\times PC/100$$."]
             ]}
    {:key :OR
@@ -120,7 +121,7 @@
     :max js/Number.POSITIVE_INFINITY
     :step 0.01
     :evaluate r-p->OR
-    :active-risk r-OR->p
+    :calc-final r-OR->p
     :maths [:<>
             [para
              "By definition, $$OR = \\frac{p}{(1-p)} / \\frac{r}{(1-r)}$$."]
@@ -132,7 +133,7 @@
     :max js/Number.POSITIVE_INFINITY
     :step 0.01
     :evaluate r-p->HR
-    :active-risk r-HR->p
+    :calc-final r-HR->p
     :maths [:<>
             [para "By definition, $HR = h_1(t)/h_0(t)$, where $h_1(t), h_0(t)$ are the hazards in the 'active' and baseline groups respectively. "]
             [para "Therefore $HR = H_1(t)/H_0(t)$, where $H_1(t), H_0(t)$ are the cumulative hazards. "]
