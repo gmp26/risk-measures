@@ -4,7 +4,7 @@
 
 (def delta 
   "Our precision for any baseline or absolute risk"
-  0.01)
+  0.001)
 
 ;;
 ;; In the following calculations, r is the baseline risk and p is the final risk
@@ -27,6 +27,8 @@
 
   (r-RR->p 0.1 1.2)
   ;; => 0.12
+
+
   )
 ;--- PC
 (defn r-p->PC
@@ -43,6 +45,9 @@
 
   (r-PC->p 0.1 20)
   ;; => 0.12000000000000001
+
+  (r-p->PC 0.1 0.12)
+  ;; => 19.999999999999996
 
   )
 
@@ -72,6 +77,7 @@
 ;---
 (defn r-p->HR
   [r p]
+
   (/ (js/Math.log (- 1 p)) (js/Math.log (- 1 r))))
 
 (defn r-HR->p

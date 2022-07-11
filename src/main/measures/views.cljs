@@ -1,6 +1,6 @@
 (ns measures.views
   (:require
-   [reagent.core :as r]
+   ;[reagent.core :as r]
    [measures.base :as base :refer [page button-primary button-secondary-link link section1 section2 para spacer]]
    [measures.events :as events]
    [measures.db :as db]
@@ -63,14 +63,15 @@
   (info/r-RR->p 0.11 1)
   (-> @ref measure))
 
-#_(defn update-all-measures
-  "Given values of r and p, recalculate all measures"
-  [ref r p]
-  (swap! ref assoc 
-         :RR (info/r-p->RR r p)
-         :PC (info/r-p->PC r p)
-         :OR (info/r-p->OR r p)
-         :HR (info/r-p->HR r p)))
+
+
+(defn safe
+  [v fix]
+  (let [x (js/Number (.toFixed (js/Number v) fix))]
+    (assert (is-number? x))
+    x
+    )
+  )
 
 (defn maybe-value
   "return a value or an eror if value is invalid.
@@ -95,8 +96,7 @@
                new-value
                (@ref (:key measure)))]
 
-        (swap! ref assoc :final p)
-        (swap! ref assoc :final (.toFixed (js/Number p) 2))
+        (swap! ref assoc :final (safe p 3))
 
         ;; r-XX->p
         (js/console.log (str "r-" (:name measure) "->p ")
@@ -110,11 +110,11 @@
 
         ;; update all derived measures atomically
         (swap! ref assoc
-               :baseline r
-               :RR (.toFixed (js/Number (info/r-p->RR r p)) 2)
-               :PC (.toFixed (js/Number (info/r-p->PC r p)) 1)
-               :OR (.toFixed (js/Number (info/r-p->OR r p)) 2)
-               :HR (.toFixed (js/Number (info/r-p->HR r p)) 2))
+               :baseline (safe r 3)
+               :RR (safe (info/r-p->RR r p) 2)
+               :PC (safe (info/r-p->PC r p) 1)
+               :OR (safe (info/r-p->OR r p) 2)
+               :HR (safe (info/r-p->HR r p) 2))
 
           ;; r-p->XX
         (js/console.log (str "(r-p" "->" (:name measure))
@@ -124,23 +124,23 @@
       (let
         ;; The measure field has changed
         ;; Keep baseline fixed recalculate final and other measures
-       [r (:baseline @ref)
+       [r (js/Number (:baseline @ref))
         p ((:calc-final measure)
            r
-           (@ref (:key measure)))]
+           new-value)]
 
         (js/console.log "r-" (:name measure) "->p "
                         r
                         p)
 
-        (swap! ref assoc :final (.toFixed (js/Number p) 2))
+        (swap! ref assoc :final (safe p 3))
 
                 ;; update all derived measures atomically
         (swap! ref assoc
-               :RR (.toFixed (js/Number (info/r-p->RR r p)) 2)
-               :PC (.toFixed (js/Number (info/r-p->PC r p)) 1)
-               :OR (.toFixed (js/Number (info/r-p->OR r p)) 2)
-               :HR (.toFixed (js/Number (info/r-p->HR r p)) 2)))))
+               :RR (safe (info/r-p->RR r p) 2)
+               :PC (safe (info/r-p->PC r p) 1)
+               :OR (safe (info/r-p->OR r p) 2)
+               :HR (safe (info/r-p->HR r p) 2)))))
 
     [nil new-value])
 
@@ -215,8 +215,17 @@
 (comment
   (def ref db/state)
   (def field :RR)
-  (.toFixed (js/Number 0.5) 2)
+  (safe (js/Number 0.5) 2)
+  (def measure (info/current-measure))
+  (-> @db/state :RR)
   )
+
+(defn step-from-field
+  [field]
+  ((info/measure-by field) :step)
+  )
+
+(step-from-field :HR)
 
 (defn dps-from-step
   [step]
@@ -225,7 +234,11 @@
 (defn get-field-value
   "Evaluate a field to configured precision"
   [ref field]
-    (-> @ref
+  (safe (@ref field) (if (#{:baseline :final} field)
+                       3
+                       (-> field step-from-field dps-from-step)
+                       #_(dps-from-step (step-from-field field))))
+    #_(-> @ref
         field
         (js/Number.
          (.toFixed (if (#{:baseline :final} field)
@@ -296,21 +309,12 @@
      [section2 (str "Currently")]
      [:p.ml-4 "The baseline risk is " (:baseline @db/state)]
      [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :RR))) " is ") (:RR @db/state)]
-     [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :PC))) " is ") (:baseline @db/state)]
-     [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :OR))) " is ") (:baseline @db/state)]
-     [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :HR))) " is ") (:baseline @db/state)]
+     [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :PC))) " is ") (:PC @db/state)]
+     [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :OR))) " is ") (:OR @db/state)]
+     [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :HR))) " is ") (:HR @db/state)]
      [:p.ml-4 "So the final risk is " (:final @db/state)]
 
-    
-
-
-     #_[:span.ml-4 "The final Risk is "
-        [:b.text-4xl (.toPrecision (js/Number final) 3)]
-        " or "
-        [:b.text-4xl (.toFixed (js/Number (* final 100)) 0) "%"]
-
-        #_(.toPrecision (js/Number ((:calc-final measure) (:baseline @db/state) (:measure-value @db/state)))
-                        2)]]))
+    ]))
 
 (comment
   (info/current-measure)
@@ -340,13 +344,13 @@
 
       [:form.mt-2
        #_{:no-validate true}
-       [:div [enter {:min delta :max 1 :step delta}
+       [:div [enter {:min delta :max (- 1 delta) :step delta}
                    db/state :baseline "Baseline risk "]]
 
        [:div [enter {:min (:min measure) :max (:max measure) :step (:step measure)}
                    db/state (:key measure) (:title measure)]]
 
-       [:div [enter {:min delta :max 1 :step delta}
+       [:div [enter {:min delta :max (- 1 delta) :step delta}
                    db/state :final "Final (absolute) risk"]]]]]))
 
 
