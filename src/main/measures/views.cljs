@@ -410,13 +410,15 @@
    ]) 
 
 (defn home []
+  (js/setTimeout base/render-math 10)
   [:<>
    [master-detail]
    [:section.flex.justify-centre.space-around;.w-full.m-4
     [button-primary {:on-click events/go-flash-page} "Home"]
     [spacer]
     [button-secondary-link {:href "https://realrisk.wintoncentre.uk/"
-                            :target "_blank"} "Switch to Real Risk"]]])
+                            :target "_blank"} "Switch to Real Risk"]]
+   ])
 
 (defn main
   []

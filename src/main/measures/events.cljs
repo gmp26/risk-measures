@@ -54,7 +54,8 @@
 
 
 (defn go-home []
-  (swap! db/state assoc :page? :home))
+  (swap! db/state assoc :page? :home)
+  )
 
 (defn go-flash-page []
   (swap! db/state assoc :page? :flash))
