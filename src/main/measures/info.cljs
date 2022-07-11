@@ -19,7 +19,7 @@
 (defn r-RR->p
   "Find final from baseline and RR"
   [r RR]
-  (* r RR))
+  (min (* r RR) (- 1 delta)))
 
 (comment
   (r-p->RR 0.1 0.12)
@@ -37,7 +37,7 @@
   (* 100 (- (/ p r) 1)))
 (defn r-PC->p
   [r PC]
-  (+ r (* r (/ PC 100))))
+  (min (+ r (* r (/ PC 100))) (- 1 delta)))
 
 (comment
   (r-p->PC 0.1 0.12)
@@ -59,7 +59,7 @@
 (defn r-OR->p
   [r OR]
   #_(/ 1 (* OR r (/ 1 (- 1 r))))
-  (- 1 (/ 1 (+ 1 (* OR r (/ 1 (- 1 r)) ))))
+  (min (- 1 (/ 1 (+ 1 (* OR r (/ 1 (- 1 r)))))) (- 1 delta))
   #_(let [mu (* OR (/ r (- 1 r)))]
     (/ mu (inc mu))))
 
@@ -82,7 +82,7 @@
 
 (defn r-HR->p
   [r HR]
-  (- 1 (js/Math.pow (- 1 r) HR)))
+  (min (- 1 (js/Math.pow (- 1 r) HR)) (- 1 delta)))
 
 (comment
   (r-p->HR 0.1 0.12)
