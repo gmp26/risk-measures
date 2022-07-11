@@ -53,16 +53,15 @@
     (js/Number.POSITIVE_INFINITY)))
 
 (comment
-  
+
   (def measure (info/current-measure)
                ;; => {:min 0, :evaluate #object[measures$info$r_p__GT_RR], :key :RR, :maths [:<> [#object[measures$base$para] "By definition, $$RR = \\frac{p}{r}$$."] [#object[measures$base$para] "So the final risk is $$p = r \\times RR$$."]], :name "RR", :title "Relative Risk", :max ##Inf, :step 0.01, :calc-final #object[measures$info$r_RR__GT_p]}
-)
+    )
   (def new-value 0.11)
   (def ref db/state)
   (def field :baseline)
   (info/r-RR->p 0.11 1)
-  (-> @ref measure)
-  )
+  (-> @ref measure))
 
 #_(defn update-all-measures
   "Given values of r and p, recalculate all measures"
@@ -97,7 +96,8 @@
                (@ref (:key measure)))]
 
         (swap! ref assoc :final p)
-        
+        (swap! ref assoc :final (.toFixed (js/Number p) 2))
+
         ;; r-XX->p
         (js/console.log (str "r-" (:name measure) "->p ")
                         r p))
@@ -109,28 +109,40 @@
             p new-value]
 
         ;; update all derived measures atomically
-        ;; TODO: delete these as they don't change here!
         (swap! ref assoc
                :baseline r
-               :RR (info/r-p->RR r p)
-               :PC (info/r-p->PC r p)
-               :OR (info/r-p->OR r p)
-               :HR (info/r-p->HR r p))
+               :RR (.toFixed (js/Number (info/r-p->RR r p)) 2)
+               :PC (.toFixed (js/Number (info/r-p->PC r p)) 1)
+               :OR (.toFixed (js/Number (info/r-p->OR r p)) 2)
+               :HR (.toFixed (js/Number (info/r-p->HR r p)) 2))
 
-        ;; r-p->XX
+          ;; r-p->XX
         (js/console.log (str "(r-p" "->" (:name measure))
                         r p))
 
       :else
-      (do
-              ;; The measure field has changed
-        (js/console.log "r-RR->p " new-value
-                        (@ref (:key measure)))
-        (swap! ref assoc :final ((:calc-final measure)
-                                 new-value
-                                 (@ref (:key measure))))))
+      (let
+        ;; The measure field has changed
+        ;; Keep baseline fixed recalculate final and other measures
+       [r (:baseline @ref)
+        p ((:calc-final measure)
+           r
+           (@ref (:key measure)))]
 
-    [nil new-value]))
+        (js/console.log "r-" (:name measure) "->p "
+                        r
+                        p)
+
+        (swap! ref assoc :final (.toFixed (js/Number p) 2))
+
+                ;; update all derived measures atomically
+        (swap! ref assoc
+               :RR (.toFixed (js/Number (info/r-p->RR r p)) 2)
+               :PC (.toFixed (js/Number (info/r-p->PC r p)) 1)
+               :OR (.toFixed (js/Number (info/r-p->OR r p)) 2)
+               :HR (.toFixed (js/Number (info/r-p->HR r p)) 2)))))
+
+    [nil new-value])
 
 
 #_(defn input-error
