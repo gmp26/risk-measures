@@ -28,7 +28,7 @@
 
 (defn page [content]
   [:div
-   {:class "container mx-auto mx-8 text-lg"}
+   {:class "mx-2 text-lg"}
    content])
 
 (defn button-primary

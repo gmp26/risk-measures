@@ -22,9 +22,8 @@
   ;; Called when the page loads.
   ;; this is called in the index.html and must be exported
   ;; so it is available even in :advanced release builds
-  (js/console.log "init")
-  (.render root (r/as-element [views/main]))
- )
+  
+  (.render root (r/as-element [views/main])))
 
 (defn ^:dev/after-load rerender []
   (init)
@@ -44,7 +43,7 @@
 
 ;; this is called before any code is reloaded
 (defn ^:dev/before-load stop []
-  (js/console.log "stop"))
+  )
 
 (comment
   (swap! db/state assoc :page? :main)

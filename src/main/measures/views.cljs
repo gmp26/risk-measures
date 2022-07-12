@@ -41,8 +41,8 @@
         [:section {:class "m-4"}
          "Let the baseline risk be $r$. 
           The risk in the 'active' group, $p$, depends on the measure of change"]
-        [:ul
-         [:li.m-4
+        [:ul {:class "maxw-[800px]"}
+         [:li.ml-4.mt-0 
           (:maths m)]]]])))
 
 (defn max-relative-risk
@@ -306,15 +306,16 @@
   (let [measure (info/current-measure)
         final (js/Number ((:calc-final measure) (:baseline @db/state) (:measure-value @db/state)))
         measure-title (string/lower-case (:title measure))]
-    [:section {:class "ml-4 mt-2 first-letter:flex flex-col w-auto min-w-80"}
+    [:section {:class "ml-4 mt-2 pr-2 first-letter:flex flex-col min-w-[300px]"}
      ;[section2 (str "Currently")]
      [:b (str "Status")]
-     [:p.ml-4 "The baseline risk is " (safe (:baseline @db/state) 3) " or "  (safe (* 100 (:baseline @db/state)) 1) "%"]
-     [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :RR))) " is ") (:RR @db/state)]
-     [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :PC))) " is ") (:PC @db/state)]
-     [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :OR))) " is ") (:OR @db/state)]
-     [:p.ml-4 (str "The " (string/lower-case (:title (info/measure-by :HR))) " is ") (:HR @db/state)]
-     [:p.ml-4 "So the final risk is " (:final @db/state)]
+     [:p "The baseline risk is " (safe (:baseline @db/state) 3) " or "  (safe (* 100 (:baseline @db/state)) 1) "%"]
+     [:p.mt-1 (str "The " (string/lower-case (:title (info/measure-by :RR))) " is ") (:RR @db/state)]
+     [:p.mt-1 (str "The " (string/lower-case (:title (info/measure-by :PC))) " is ") (:PC @db/state) "%"]
+     [:p.mt-1 (str "The " (string/lower-case (:title (info/measure-by :OR))) " is ") (:OR @db/state)]
+     [:p.mt-1 (str "The " (string/lower-case (:title (info/measure-by :HR))) " is ") (:HR @db/state)]
+     [:p.mt-1 "So the final risk is " (:final @db/state)
+      " or " (* 100 (:final @db/state)) "%."]
 
     ]))
 
@@ -353,7 +354,7 @@
                    db/state (:key measure) (:title measure)]]
 
        [:div [enter {:min delta :max (- 1 delta) :step delta}
-                   db/state :final "Final (absolute) risk"]]]]]))
+                   db/state :final "Final 'active' risk"]]]]]))
 
 
 (defn master-detail
@@ -384,16 +385,18 @@
      [para "
           The results are often published as some relative measure risk"] "."
      " Depending on context, you may encounter Relative Risks, Percentage Changes, Odds Ratios, or Hazard Ratios. "]
-    [para [:span.text-base "The maths differs in each case, but the final real risk
-            is always determined by applying the relative risk measurement to the baseline risk."]]
+    [para [:span.text-base "The maths differs in each case, but the final active risk
+            is always determined by applying the relative risk measurement to the baseline risk. "
+           "The baseline risk, relative risk, and final risk are related so that knowing two allows you to determine the third."
+                            ]]
     [para [:i "Here, we provide calculators and definitions for each of these risk measures."]]]
    #_[para [:b.text-blue-400 "Choose a risk measure to continue:"]]])
 
 
 (defn flash
   []
-  [:section {:class "text-gray-600 body-font"}
-   [:div {:class "container mx-auto flex px-5 py- md:flex-row flex-col items-start"}
+  [:section {:class "p-4 text-gray-600 body-font"}
+   [:div {:class "flex flex-col md:flex-row justify-start items-start"}
     [:div {:class "lg:flex md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center"}
      [:h1 {:class "title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900"}
       "RealRisk - Light"]
@@ -403,17 +406,24 @@
                               :target "_blank"} "Full Version"]
       [spacer]
       [button-primary {:on-click events/go-home} "Light Version"]]]
-    [:div {:class "sm:block :max-w-2xl lg:w-full md:w-1/2 w-5/6 "}
-     [:img {:class "object-cover object-center rounded-md"
+    [:div {:class "max-w-[400px]" #_"sm:block :max-w-2xl lg:w-full md:w-1/2 w-5/6 "}
+     [:img {:class "object-cover object-center rounded-md  w-auto "
             :alt "hero"
-            :src "/assets/flash.png"}]]]
+            :src "/assets/flash.jpg"}]
+     [:div " Photo by "
+      [:a {:class "underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+           :href "https://unsplash.com/@johnmoeses"}
+       "John Moeses Bauan"] " on "
+      [:a {:class "underline text-blue-600 hover:text-blue-800 visited:text-purple-600"
+           :href "https://unsplash.com/s/photos/risk?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"} "Unsplash"]]]]
    ]) 
 
 (defn home []
   (js/setTimeout base/render-math 10)
-  [:<>
+  [:div
+   {:class "container flex flex-col h-screen justify-between pt-2"}
    [master-detail]
-   [:section.flex.justify-centre.space-around;.w-full.m-4
+   [:section.flex.justify-centre.space-around.m-2
     [button-primary {:on-click events/go-flash-page} "Home"]
     [spacer]
     [button-secondary-link {:href "https://realrisk.wintoncentre.uk/"

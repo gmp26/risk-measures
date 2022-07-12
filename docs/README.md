@@ -1,3 +1,12 @@
+# RealRisk Light
+Is a maths reference and a crib-sheet addition to [RealRisk](https://realrisk.wintoncentre.uk).
+
+Technically, it's based on the [example of how to setup shadow-cljs and tailwindcss](https://github.com/tailwindlabs/tailwindcss) by Jacek Schae, and his docs are reproduced below.
+
+We also added in [KaTeX](https://katex.org) to support maths rendering
+
+
+
 # shadow-cljs + tailwindcss
 
 This is an example of how to setup shadow-cljs and [tailwindcss](https://github.com/tailwindlabs/tailwindcss)

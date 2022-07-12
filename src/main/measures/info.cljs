@@ -105,8 +105,8 @@
     :calc-final r-RR->p
     :maths [:<>
             [para
-             "By definition, $$RR = \\frac{p}{r}$$."]
-            [para "So the final risk is $$p = r \\times RR$$."]]}
+             "By definition, $$RR = \\frac{p}{r}$$"]
+            [para "So the final risk is $$p = r \\times RR$$"]]}
    {:key :PC
     :name "PC"
     :title "Percentage Change"
@@ -118,7 +118,7 @@
     :maths [:<>
            [para "By definition: $PC$ is the change in risk
                    expressed as a percentage $$\\frac{p - r}{r} \\times 100 \\ \\%$$"] 
-            [para "So the final risk is $$r + r \\times PC/100$$."]
+            [para "So the final risk is $$r + r \\times PC/100$$"]
             ]}
    {:key :OR
     :name "OR"
@@ -130,8 +130,8 @@
     :calc-final r-OR->p
     :maths [:<>
             [para
-             "By definition, $$OR = \\frac{p}{(1-p)} / \\frac{r}{(1-r)}$$."]
-            [para "Solving gives $$p = 1 - \\frac{1}{1+ OR \\frac{r}{(1-r)}}$$."]]}
+             "By definition, $$OR = \\frac{p}{(1-p)} / \\frac{r}{(1-r)}$$"]
+            [para "Solving gives $$p = 1 - \\frac{1}{1+ OR \\frac{r}{(1-r)}}$$"]]}
    {:key :HR
     :name "HR"
     :title "Hazard Ratio"
@@ -141,12 +141,16 @@
     :evaluate r-p->HR
     :calc-final r-HR->p
     :maths [:<>
-            [para "By definition, $HR = h_1(t)/h_0(t)$, where $h_1(t), h_0(t)$ are the hazards in the 'active' and baseline groups respectively. "]
-            [para "Therefore $HR = H_1(t)/H_0(t)$, where $H_1(t), H_0(t)$ are the cumulative hazards. "]
-            [para "Now $H_1(t) = -\\log S_1(t), H_0(t) = -\\log S_0(t)$, where $S_1(t), S_0(t)$ are the survival probabilities.   "]
-            [para "And so $HR = \\log S_1(t)/ \\log S_0(t).$"]
-            [para "For a specified follow-up time $t$, we have risks $p = 1- S_1(t)$, $r = 1- S_0(t)$, and so $$HR = \\frac{\\log (1-p)}{\\log (1-r)}$$."]
-            [para "Rearranging gives  $$p = 1 - (1-r)^{HR}$$."]]}])
+            [:p "Hazard ratios are relevant when looking at survival over time."]
+            [:p "By definition, " "$HR = h_1(t)/h_0(t)$" ", where " "$h_1(t), h_0(t)$"
+             " are the hazards in the 'active'" " and baseline groups respectively at time $t$. "]
+            [:p.pt-2 "Therefore " "$HR = H_1(t)/H_0(t)$" ", where $H_1(t), H_0(t)$ are the cumulative hazards. "]
+            [:p.pt-2 "A standard result is that  $H_1(t) = -\\log S_1(t), H_0(t) = -\\log S_0(t)$, " 
+             "where $S_1(t), S_0(t)$ are the survival probabilities up to time $t$."]
+            [:p.pt-2 "And so $HR = \\log S_1(t)/ \\log S_0(t).$"]
+            [:p.pt-2 "For a specified follow-up time $t$, we have risks" 
+             " $p = 1- S_1(t)$, $r = 1- S_0(t)$, and so $$HR = \\frac{\\log (1-p)}{\\log (1-r)}$$"]
+            [:p "Rearranging gives  $$p = 1 - (1-r)^{HR}$$"]]}])
 
 (defn measure-by [key]
   (first ((group-by :key measures) key)))
