@@ -1,15 +1,15 @@
 goog.provide('measures.app');
 var module$node_modules$react_dom$client=shadow.js.require("module$node_modules$react_dom$client", {});
 measures.app.app = (function measures$app$app(){
-var pred__49652 = cljs.core._EQ_;
-var expr__49653 = new cljs.core.Keyword(null,"page?","page?",644039860).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state));
-if(cljs.core.truth_((pred__49652.cljs$core$IFn$_invoke$arity$2 ? pred__49652.cljs$core$IFn$_invoke$arity$2(new cljs.core.Keyword(null,"main","main",-2117802661),expr__49653) : pred__49652.call(null,new cljs.core.Keyword(null,"main","main",-2117802661),expr__49653)))){
+var pred__49675 = cljs.core._EQ_;
+var expr__49676 = new cljs.core.Keyword(null,"page?","page?",644039860).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state));
+if(cljs.core.truth_((pred__49675.cljs$core$IFn$_invoke$arity$2 ? pred__49675.cljs$core$IFn$_invoke$arity$2(new cljs.core.Keyword(null,"main","main",-2117802661),expr__49676) : pred__49675.call(null,new cljs.core.Keyword(null,"main","main",-2117802661),expr__49676)))){
 return new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [measures.views.main], null);
 } else {
-if(cljs.core.truth_((pred__49652.cljs$core$IFn$_invoke$arity$2 ? pred__49652.cljs$core$IFn$_invoke$arity$2(new cljs.core.Keyword(null,"else","else",-1508377146),expr__49653) : pred__49652.call(null,new cljs.core.Keyword(null,"else","else",-1508377146),expr__49653)))){
+if(cljs.core.truth_((pred__49675.cljs$core$IFn$_invoke$arity$2 ? pred__49675.cljs$core$IFn$_invoke$arity$2(new cljs.core.Keyword(null,"else","else",-1508377146),expr__49676) : pred__49675.call(null,new cljs.core.Keyword(null,"else","else",-1508377146),expr__49676)))){
 return alert("bad states");
 } else {
-throw (new Error(["No matching clause: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(expr__49653)].join('')));
+throw (new Error(["No matching clause: ",cljs.core.str.cljs$core$IFn$_invoke$arity$1(expr__49676)].join('')));
 }
 }
 });
@@ -28,11 +28,11 @@ return renderMathInElement(document.body,({"delimiters": [({"left": "$$", "right
 } else {
 return null;
 }
-}catch (e49655){if((e49655 instanceof ReferenceError)){
-var e = e49655;
+}catch (e49682){if((e49682 instanceof ReferenceError)){
+var e = e49682;
 return cljs.core.println.cljs$core$IFn$_invoke$arity$variadic(cljs.core.prim_seq.cljs$core$IFn$_invoke$arity$2(["ERROR:",e], 0));
 } else {
-throw e49655;
+throw e49682;
 
 }
 }});
