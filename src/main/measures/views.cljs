@@ -359,7 +359,7 @@
 (defn master-detail
   []
   [:section
-   {:class "flex md:flex-row flex-col"}
+   {:class "flex md:flex-row flex-col overflow-y-auto"}
    #_[:div {:class "w-64"}
     [error-report]]
    [:div.flex.flex-col

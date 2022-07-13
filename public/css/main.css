@@ -903,6 +903,9 @@ select {
 .justify-between {
   justify-content: space-between;
 }
+.overflow-y-auto {
+  overflow-y: auto;
+}
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;
