@@ -297,8 +297,6 @@
                          (:title m)])
                 (info/tools)))]))
 
-(def field :final)
-
 
 (defn status
   []
@@ -314,8 +312,8 @@
      [:p.mt-1 (str "The " (string/lower-case (:title (info/measure-by :PC))) " is ") (:PC @db/state) "%"]
      [:p.mt-1 (str "The " (string/lower-case (:title (info/measure-by :OR))) " is ") (:OR @db/state)]
      [:p.mt-1 (str "The " (string/lower-case (:title (info/measure-by :HR))) " is ") (:HR @db/state)]
-     [:p.mt-1 "So the final risk is " (:final @db/state)
-      " or " (* 100 (:final @db/state)) "%."]
+     [:p.mt-1 "So the final risk is " (safe (:final @db/state) 3)
+      " or " (safe (* 100 (:final @db/state)) 3) "%."]
 
     ]))
 

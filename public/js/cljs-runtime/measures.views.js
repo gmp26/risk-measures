@@ -53,40 +53,40 @@ return x;
  * from applying the formulae.
  */
 measures.views.maybe_value = (function measures$views$maybe_value(ref,field,new_value){
-var measure_49706 = measures.info.current_measure();
-var new_value_49707__$1 = (function (){var fexpr__49688 = (cljs.core.truth_((measures.db.numeric_fields.cljs$core$IFn$_invoke$arity$1 ? measures.db.numeric_fields.cljs$core$IFn$_invoke$arity$1(field) : measures.db.numeric_fields.call(null,field)))?Number:cljs.core.identity);
-return (fexpr__49688.cljs$core$IFn$_invoke$arity$1 ? fexpr__49688.cljs$core$IFn$_invoke$arity$1(new_value) : fexpr__49688.call(null,new_value));
+var measure_46022 = measures.info.current_measure();
+var new_value_46023__$1 = (function (){var fexpr__46000 = (cljs.core.truth_((measures.db.numeric_fields.cljs$core$IFn$_invoke$arity$1 ? measures.db.numeric_fields.cljs$core$IFn$_invoke$arity$1(field) : measures.db.numeric_fields.call(null,field)))?Number:cljs.core.identity);
+return (fexpr__46000.cljs$core$IFn$_invoke$arity$1 ? fexpr__46000.cljs$core$IFn$_invoke$arity$1(new_value) : fexpr__46000.call(null,new_value));
 })();
 if(cljs.core._EQ_.cljs$core$IFn$_invoke$arity$2(field,new cljs.core.Keyword(null,"baseline","baseline",1151033280))){
-var r_49708 = new_value_49707__$1;
-var p_49709 = (function (){var G__49690 = new_value_49707__$1;
-var G__49691 = (function (){var G__49693 = new cljs.core.Keyword(null,"key","key",-1516042587).cljs$core$IFn$_invoke$arity$1(measure_49706);
-var fexpr__49692 = cljs.core.deref(ref);
-return (fexpr__49692.cljs$core$IFn$_invoke$arity$1 ? fexpr__49692.cljs$core$IFn$_invoke$arity$1(G__49693) : fexpr__49692.call(null,G__49693));
+var r_46024 = new_value_46023__$1;
+var p_46025 = (function (){var G__46002 = new_value_46023__$1;
+var G__46003 = (function (){var G__46005 = new cljs.core.Keyword(null,"key","key",-1516042587).cljs$core$IFn$_invoke$arity$1(measure_46022);
+var fexpr__46004 = cljs.core.deref(ref);
+return (fexpr__46004.cljs$core$IFn$_invoke$arity$1 ? fexpr__46004.cljs$core$IFn$_invoke$arity$1(G__46005) : fexpr__46004.call(null,G__46005));
 })();
-var fexpr__49689 = new cljs.core.Keyword(null,"calc-final","calc-final",1060997511).cljs$core$IFn$_invoke$arity$1(measure_49706);
-return (fexpr__49689.cljs$core$IFn$_invoke$arity$2 ? fexpr__49689.cljs$core$IFn$_invoke$arity$2(G__49690,G__49691) : fexpr__49689.call(null,G__49690,G__49691));
+var fexpr__46001 = new cljs.core.Keyword(null,"calc-final","calc-final",1060997511).cljs$core$IFn$_invoke$arity$1(measure_46022);
+return (fexpr__46001.cljs$core$IFn$_invoke$arity$2 ? fexpr__46001.cljs$core$IFn$_invoke$arity$2(G__46002,G__46003) : fexpr__46001.call(null,G__46002,G__46003));
 })();
-cljs.core.swap_BANG_.cljs$core$IFn$_invoke$arity$4(ref,cljs.core.assoc,new cljs.core.Keyword(null,"final","final",1157881357),measures.views.safe(p_49709,(3)));
+cljs.core.swap_BANG_.cljs$core$IFn$_invoke$arity$4(ref,cljs.core.assoc,new cljs.core.Keyword(null,"final","final",1157881357),measures.views.safe(p_46025,(3)));
 
-console.log(["r-",cljs.core.str.cljs$core$IFn$_invoke$arity$1(new cljs.core.Keyword(null,"name","name",1843675177).cljs$core$IFn$_invoke$arity$1(measure_49706)),"->p "].join(''),r_49708,p_49709);
+console.log(["r-",cljs.core.str.cljs$core$IFn$_invoke$arity$1(new cljs.core.Keyword(null,"name","name",1843675177).cljs$core$IFn$_invoke$arity$1(measure_46022)),"->p "].join(''),r_46024,p_46025);
 } else {
 if(cljs.core._EQ_.cljs$core$IFn$_invoke$arity$2(field,new cljs.core.Keyword(null,"final","final",1157881357))){
-var r_49710 = new cljs.core.Keyword(null,"baseline","baseline",1151033280).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(ref));
-var p_49711 = new_value_49707__$1;
-cljs.core.swap_BANG_.cljs$core$IFn$_invoke$arity$variadic(ref,cljs.core.assoc,new cljs.core.Keyword(null,"baseline","baseline",1151033280),measures.views.safe(r_49710,(3)),cljs.core.prim_seq.cljs$core$IFn$_invoke$arity$2([new cljs.core.Keyword(null,"RR","RR",-1849589574),measures.views.safe(measures.info.r_p__GT_RR(r_49710,p_49711),(2)),new cljs.core.Keyword(null,"PC","PC",-2096819416),measures.views.safe(measures.info.r_p__GT_PC(r_49710,p_49711),(1)),new cljs.core.Keyword(null,"OR","OR",-1220615924),measures.views.safe(measures.info.r_p__GT_OR(r_49710,p_49711),(2)),new cljs.core.Keyword(null,"HR","HR",1056134531),measures.views.safe(measures.info.r_p__GT_HR(r_49710,p_49711),(2))], 0));
+var r_46026 = new cljs.core.Keyword(null,"baseline","baseline",1151033280).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(ref));
+var p_46027 = new_value_46023__$1;
+cljs.core.swap_BANG_.cljs$core$IFn$_invoke$arity$variadic(ref,cljs.core.assoc,new cljs.core.Keyword(null,"baseline","baseline",1151033280),measures.views.safe(r_46026,(3)),cljs.core.prim_seq.cljs$core$IFn$_invoke$arity$2([new cljs.core.Keyword(null,"RR","RR",-1849589574),measures.views.safe(measures.info.r_p__GT_RR(r_46026,p_46027),(2)),new cljs.core.Keyword(null,"PC","PC",-2096819416),measures.views.safe(measures.info.r_p__GT_PC(r_46026,p_46027),(1)),new cljs.core.Keyword(null,"OR","OR",-1220615924),measures.views.safe(measures.info.r_p__GT_OR(r_46026,p_46027),(2)),new cljs.core.Keyword(null,"HR","HR",1056134531),measures.views.safe(measures.info.r_p__GT_HR(r_46026,p_46027),(2))], 0));
 
-console.log(["(r-p","->",cljs.core.str.cljs$core$IFn$_invoke$arity$1(new cljs.core.Keyword(null,"name","name",1843675177).cljs$core$IFn$_invoke$arity$1(measure_49706))].join(''),r_49710,p_49711);
+console.log(["(r-p","->",cljs.core.str.cljs$core$IFn$_invoke$arity$1(new cljs.core.Keyword(null,"name","name",1843675177).cljs$core$IFn$_invoke$arity$1(measure_46022))].join(''),r_46026,p_46027);
 } else {
-var r_49712 = Number(new cljs.core.Keyword(null,"baseline","baseline",1151033280).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(ref)));
-var p_49713 = (function (){var fexpr__49694 = new cljs.core.Keyword(null,"calc-final","calc-final",1060997511).cljs$core$IFn$_invoke$arity$1(measure_49706);
-return (fexpr__49694.cljs$core$IFn$_invoke$arity$2 ? fexpr__49694.cljs$core$IFn$_invoke$arity$2(r_49712,new_value_49707__$1) : fexpr__49694.call(null,r_49712,new_value_49707__$1));
+var r_46028 = Number(new cljs.core.Keyword(null,"baseline","baseline",1151033280).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(ref)));
+var p_46029 = (function (){var fexpr__46006 = new cljs.core.Keyword(null,"calc-final","calc-final",1060997511).cljs$core$IFn$_invoke$arity$1(measure_46022);
+return (fexpr__46006.cljs$core$IFn$_invoke$arity$2 ? fexpr__46006.cljs$core$IFn$_invoke$arity$2(r_46028,new_value_46023__$1) : fexpr__46006.call(null,r_46028,new_value_46023__$1));
 })();
-console.log("r-",new cljs.core.Keyword(null,"name","name",1843675177).cljs$core$IFn$_invoke$arity$1(measure_49706),"->p ",r_49712,p_49713);
+console.log("r-",new cljs.core.Keyword(null,"name","name",1843675177).cljs$core$IFn$_invoke$arity$1(measure_46022),"->p ",r_46028,p_46029);
 
-cljs.core.swap_BANG_.cljs$core$IFn$_invoke$arity$4(ref,cljs.core.assoc,new cljs.core.Keyword(null,"final","final",1157881357),measures.views.safe(p_49713,(3)));
+cljs.core.swap_BANG_.cljs$core$IFn$_invoke$arity$4(ref,cljs.core.assoc,new cljs.core.Keyword(null,"final","final",1157881357),measures.views.safe(p_46029,(3)));
 
-cljs.core.swap_BANG_.cljs$core$IFn$_invoke$arity$variadic(ref,cljs.core.assoc,new cljs.core.Keyword(null,"RR","RR",-1849589574),measures.views.safe(measures.info.r_p__GT_RR(r_49712,p_49713),(2)),cljs.core.prim_seq.cljs$core$IFn$_invoke$arity$2([new cljs.core.Keyword(null,"PC","PC",-2096819416),measures.views.safe(measures.info.r_p__GT_PC(r_49712,p_49713),(1)),new cljs.core.Keyword(null,"OR","OR",-1220615924),measures.views.safe(measures.info.r_p__GT_OR(r_49712,p_49713),(2)),new cljs.core.Keyword(null,"HR","HR",1056134531),measures.views.safe(measures.info.r_p__GT_HR(r_49712,p_49713),(2))], 0));
+cljs.core.swap_BANG_.cljs$core$IFn$_invoke$arity$variadic(ref,cljs.core.assoc,new cljs.core.Keyword(null,"RR","RR",-1849589574),measures.views.safe(measures.info.r_p__GT_RR(r_46028,p_46029),(2)),cljs.core.prim_seq.cljs$core$IFn$_invoke$arity$2([new cljs.core.Keyword(null,"PC","PC",-2096819416),measures.views.safe(measures.info.r_p__GT_PC(r_46028,p_46029),(1)),new cljs.core.Keyword(null,"OR","OR",-1220615924),measures.views.safe(measures.info.r_p__GT_OR(r_46028,p_46029),(2)),new cljs.core.Keyword(null,"HR","HR",1056134531),measures.views.safe(measures.info.r_p__GT_HR(r_46028,p_46029),(2))], 0));
 
 }
 }
@@ -119,10 +119,10 @@ return (function (e){
 e.nativeEvent.preventDefault();
 
 var new_value = e.target.value;
-var vec__49695 = measures.views.maybe_value(ref,field,new_value);
-var err_field = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__49695,(0),null);
-var good_value = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__49695,(1),null);
-var error = vec__49695;
+var vec__46007 = measures.views.maybe_value(ref,field,new_value);
+var err_field = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__46007,(0),null);
+var good_value = cljs.core.nth.cljs$core$IFn$_invoke$arity$3(vec__46007,(1),null);
+var error = vec__46007;
 cljs.core.println.cljs$core$IFn$_invoke$arity$variadic(cljs.core.prim_seq.cljs$core$IFn$_invoke$arity$2([new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [err_field,good_value], null)], 0));
 
 if(cljs.core.truth_(err_field)){
@@ -133,8 +133,8 @@ return cljs.core.swap_BANG_.cljs$core$IFn$_invoke$arity$4(ref,cljs.core.assoc,fi
 });
 });
 measures.views.step_from_field = (function measures$views$step_from_field(field){
-var fexpr__49698 = measures.info.measure_by(field);
-return (fexpr__49698.cljs$core$IFn$_invoke$arity$1 ? fexpr__49698.cljs$core$IFn$_invoke$arity$1(new cljs.core.Keyword(null,"step","step",1288888124)) : fexpr__49698.call(null,new cljs.core.Keyword(null,"step","step",1288888124)));
+var fexpr__46010 = measures.info.measure_by(field);
+return (fexpr__46010.cljs$core$IFn$_invoke$arity$1 ? fexpr__46010.cljs$core$IFn$_invoke$arity$1(new cljs.core.Keyword(null,"step","step",1288888124)) : fexpr__46010.call(null,new cljs.core.Keyword(null,"step","step",1288888124)));
 });
 measures.views.step_from_field(new cljs.core.Keyword(null,"HR","HR",1056134531));
 measures.views.dps_from_step = (function measures$views$dps_from_step(step){
@@ -144,18 +144,18 @@ return (- Math.log10(step));
  * Evaluate a field to configured precision
  */
 measures.views.get_field_value = (function measures$views$get_field_value(ref,field){
-return measures.views.safe((function (){var fexpr__49699 = cljs.core.deref(ref);
-return (fexpr__49699.cljs$core$IFn$_invoke$arity$1 ? fexpr__49699.cljs$core$IFn$_invoke$arity$1(field) : fexpr__49699.call(null,field));
-})(),(cljs.core.truth_((function (){var fexpr__49700 = new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"baseline","baseline",1151033280),null,new cljs.core.Keyword(null,"final","final",1157881357),null], null), null);
-return (fexpr__49700.cljs$core$IFn$_invoke$arity$1 ? fexpr__49700.cljs$core$IFn$_invoke$arity$1(field) : fexpr__49700.call(null,field));
+return measures.views.safe((function (){var fexpr__46011 = cljs.core.deref(ref);
+return (fexpr__46011.cljs$core$IFn$_invoke$arity$1 ? fexpr__46011.cljs$core$IFn$_invoke$arity$1(field) : fexpr__46011.call(null,field));
+})(),(cljs.core.truth_((function (){var fexpr__46012 = new cljs.core.PersistentHashSet(null, new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"baseline","baseline",1151033280),null,new cljs.core.Keyword(null,"final","final",1157881357),null], null), null);
+return (fexpr__46012.cljs$core$IFn$_invoke$arity$1 ? fexpr__46012.cljs$core$IFn$_invoke$arity$1(field) : fexpr__46012.call(null,field));
 })())?(3):measures.views.dps_from_step(measures.views.step_from_field(field))));
 });
 /**
  * enter a labelled field value to ref in a form
  */
 measures.views.enter = (function measures$views$enter(var_args){
-var G__49702 = arguments.length;
-switch (G__49702) {
+var G__46014 = arguments.length;
+switch (G__46014) {
 case 4:
 return measures.views.enter.cljs$core$IFn$_invoke$arity$4((arguments[(0)]),(arguments[(1)]),(arguments[(2)]),(arguments[(3)]));
 
@@ -195,16 +195,15 @@ return measures.events.select_tool(new cljs.core.Keyword(null,"key","key",-15160
 })], null),new cljs.core.Keyword(null,"title","title",636505583).cljs$core$IFn$_invoke$arity$1(m)], null);
 }),measures.info.tools()))], null);
 });
-measures.views.field = new cljs.core.Keyword(null,"final","final",1157881357);
 measures.views.status = (function measures$views$status(){
 var measure = measures.info.current_measure();
-var final$ = Number((function (){var G__49704 = new cljs.core.Keyword(null,"baseline","baseline",1151033280).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state));
-var G__49705 = new cljs.core.Keyword(null,"measure-value","measure-value",-185107611).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state));
-var fexpr__49703 = new cljs.core.Keyword(null,"calc-final","calc-final",1060997511).cljs$core$IFn$_invoke$arity$1(measure);
-return (fexpr__49703.cljs$core$IFn$_invoke$arity$2 ? fexpr__49703.cljs$core$IFn$_invoke$arity$2(G__49704,G__49705) : fexpr__49703.call(null,G__49704,G__49705));
+var final$ = Number((function (){var G__46016 = new cljs.core.Keyword(null,"baseline","baseline",1151033280).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state));
+var G__46017 = new cljs.core.Keyword(null,"measure-value","measure-value",-185107611).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state));
+var fexpr__46015 = new cljs.core.Keyword(null,"calc-final","calc-final",1060997511).cljs$core$IFn$_invoke$arity$1(measure);
+return (fexpr__46015.cljs$core$IFn$_invoke$arity$2 ? fexpr__46015.cljs$core$IFn$_invoke$arity$2(G__46016,G__46017) : fexpr__46015.call(null,G__46016,G__46017));
 })());
 var measure_title = clojure.string.lower_case(new cljs.core.Keyword(null,"title","title",636505583).cljs$core$IFn$_invoke$arity$1(measure));
-return new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"section","section",-300141526),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"class","class",-2030961996),"ml-4 mt-2 pr-2 first-letter:flex flex-col min-w-[300px]"], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"b","b",1482224470),"Status"], null),new cljs.core.PersistentVector(null, 6, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"p","p",151049309),"The baseline risk is ",measures.views.safe(new cljs.core.Keyword(null,"baseline","baseline",1151033280).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state)),(3))," or ",measures.views.safe(((100) * new cljs.core.Keyword(null,"baseline","baseline",1151033280).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state))),(1)),"%"], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"p.mt-1","p.mt-1",-2099254984),["The ",clojure.string.lower_case(new cljs.core.Keyword(null,"title","title",636505583).cljs$core$IFn$_invoke$arity$1(measures.info.measure_by(new cljs.core.Keyword(null,"RR","RR",-1849589574))))," is "].join(''),new cljs.core.Keyword(null,"RR","RR",-1849589574).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state))], null),new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"p.mt-1","p.mt-1",-2099254984),["The ",clojure.string.lower_case(new cljs.core.Keyword(null,"title","title",636505583).cljs$core$IFn$_invoke$arity$1(measures.info.measure_by(new cljs.core.Keyword(null,"PC","PC",-2096819416))))," is "].join(''),new cljs.core.Keyword(null,"PC","PC",-2096819416).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state)),"%"], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"p.mt-1","p.mt-1",-2099254984),["The ",clojure.string.lower_case(new cljs.core.Keyword(null,"title","title",636505583).cljs$core$IFn$_invoke$arity$1(measures.info.measure_by(new cljs.core.Keyword(null,"OR","OR",-1220615924))))," is "].join(''),new cljs.core.Keyword(null,"OR","OR",-1220615924).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state))], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"p.mt-1","p.mt-1",-2099254984),["The ",clojure.string.lower_case(new cljs.core.Keyword(null,"title","title",636505583).cljs$core$IFn$_invoke$arity$1(measures.info.measure_by(new cljs.core.Keyword(null,"HR","HR",1056134531))))," is "].join(''),new cljs.core.Keyword(null,"HR","HR",1056134531).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state))], null),new cljs.core.PersistentVector(null, 6, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"p.mt-1","p.mt-1",-2099254984),"So the final risk is ",new cljs.core.Keyword(null,"final","final",1157881357).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state))," or ",((100) * new cljs.core.Keyword(null,"final","final",1157881357).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state))),"%."], null)], null);
+return new cljs.core.PersistentVector(null, 9, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"section","section",-300141526),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"class","class",-2030961996),"ml-4 mt-2 pr-2 first-letter:flex flex-col min-w-[300px]"], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"b","b",1482224470),"Status"], null),new cljs.core.PersistentVector(null, 6, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"p","p",151049309),"The baseline risk is ",measures.views.safe(new cljs.core.Keyword(null,"baseline","baseline",1151033280).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state)),(3))," or ",measures.views.safe(((100) * new cljs.core.Keyword(null,"baseline","baseline",1151033280).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state))),(1)),"%"], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"p.mt-1","p.mt-1",-2099254984),["The ",clojure.string.lower_case(new cljs.core.Keyword(null,"title","title",636505583).cljs$core$IFn$_invoke$arity$1(measures.info.measure_by(new cljs.core.Keyword(null,"RR","RR",-1849589574))))," is "].join(''),new cljs.core.Keyword(null,"RR","RR",-1849589574).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state))], null),new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"p.mt-1","p.mt-1",-2099254984),["The ",clojure.string.lower_case(new cljs.core.Keyword(null,"title","title",636505583).cljs$core$IFn$_invoke$arity$1(measures.info.measure_by(new cljs.core.Keyword(null,"PC","PC",-2096819416))))," is "].join(''),new cljs.core.Keyword(null,"PC","PC",-2096819416).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state)),"%"], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"p.mt-1","p.mt-1",-2099254984),["The ",clojure.string.lower_case(new cljs.core.Keyword(null,"title","title",636505583).cljs$core$IFn$_invoke$arity$1(measures.info.measure_by(new cljs.core.Keyword(null,"OR","OR",-1220615924))))," is "].join(''),new cljs.core.Keyword(null,"OR","OR",-1220615924).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state))], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"p.mt-1","p.mt-1",-2099254984),["The ",clojure.string.lower_case(new cljs.core.Keyword(null,"title","title",636505583).cljs$core$IFn$_invoke$arity$1(measures.info.measure_by(new cljs.core.Keyword(null,"HR","HR",1056134531))))," is "].join(''),new cljs.core.Keyword(null,"HR","HR",1056134531).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state))], null),new cljs.core.PersistentVector(null, 6, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"p.mt-1","p.mt-1",-2099254984),"So the final risk is ",measures.views.safe(new cljs.core.Keyword(null,"final","final",1157881357).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state)),(3))," or ",measures.views.safe(((100) * new cljs.core.Keyword(null,"final","final",1157881357).cljs$core$IFn$_invoke$arity$1(cljs.core.deref(measures.db.state))),(3)),"%."], null)], null);
 });
 /**
  * Render any errors

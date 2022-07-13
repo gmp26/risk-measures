@@ -870,9 +870,6 @@ select {
 .min-w-\[300px\] {
   min-width: 300px;
 }
-.max-w-\[300px\] {
-  max-width: 300px;
-}
 .max-w-\[400px\] {
   max-width: 400px;
 }
@@ -1224,23 +1221,8 @@ input:invalid {
     display: flex;
   }
 
-  .lg\:flex-row {
-    flex-direction: row;
-  }
-
-  .lg\:flex-col {
-    flex-direction: column;
-  }
-
   .lg\:pr-24 {
     padding-right: 6rem;
-  }
-}
-
-  @media (min-width: 1280px) {
-
-  .xl\:flex-col {
-    flex-direction: column;
   }
 }
   
