@@ -40,7 +40,7 @@
        [:<>
         [:section {:class "m-4"}
          "Let the baseline risk be $r$. 
-          The risk in the 'active' group, $p$, depends on the measure of change"]
+          The risk in the 'exposed' group, $p$, depends on the measure of change"]
         [:ul {:class "maxw-[800px]"}
          [:li.ml-4.mt-0 
           (:maths m)]]]])))
@@ -354,7 +354,7 @@
                    db/state (:key measure) (:title measure)]]
 
        [:div [enter {:min delta :max (- 1 delta) :step delta}
-                   db/state :final "Final 'active' risk"]]]]]))
+                   db/state :final "Final 'exposed' risk"]]]]]))
 
 
 (defn master-detail
@@ -380,12 +380,12 @@
     [link {:href "https://realrisk.wintoncentre.uk/"
                             :target "_blank"} "the full version."]]
    [:div {:class "hidden md:block bg-gray-200 p-4 mt-8  rounded-md"}
-    [para [:span {:class "text-base text-2xl"} "Many studies compare the risks in an 'active' group to the risks
+    [para [:span {:class "text-base text-2xl"} "Many studies compare the risks in an 'exposed' group to the risks
           in a 'baseline' or 'control' group."]
      [para "
           The results are often published as some relative measure risk"] "."
      " Depending on context, you may encounter Relative Risks, Percentage Changes, Odds Ratios, or Hazard Ratios. "]
-    [para [:span.text-base "The maths differs in each case, but the final active risk
+    [para [:span.text-base "The maths differs in each case, but the final exposed risk
             is always determined by applying the relative risk measurement to the baseline risk. "
            "The baseline risk, relative risk, and final risk are related so that knowing two allows you to determine the third."
                             ]]
