@@ -67,7 +67,8 @@
 (defn safe
   "Works except for 0.X0X"
   [v fix]
-  (if (and (string? v) (string/ends-with? v "0"))
+  (if (and (string? v) (or (string/ends-with? v "0")
+                           (string/ends-with? v ".")))
     v
     (let [x (js/Number (.toFixed (js/Number v) fix))]
       (assert (is-number? x))
