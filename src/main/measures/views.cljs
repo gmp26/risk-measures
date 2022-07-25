@@ -74,7 +74,6 @@
       (assert (is-number? x))
       x)))
 
-
 (defn maybe-value
   "return a value or an eror if value is invalid.
    Type=\"number\" inputs eliminate most - maybe all - typed entry errors, but some can arise
@@ -438,3 +437,11 @@
       [home])]
 
 )
+
+
+
+(comment
+  @db/state
+  (:final @db/state)
+  (swap! db/state assoc :final 2)
+  )

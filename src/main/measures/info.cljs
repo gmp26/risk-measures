@@ -19,7 +19,8 @@
 (defn r-RR->p
   "Find final from baseline and RR"
   [r RR]
-  (min (* r RR) (- 1 delta)))
+  ;(min (* r RR) (- 1 delta))
+  (* r RR))
 
 (comment
   (r-p->RR 0.1 0.12)
