@@ -3,8 +3,8 @@ measures.events.check = (function measures$events$check(errors,key,new_val){
 return null;
 });
 measures.events.baseline_changed = (function measures$events$baseline_changed(new_val){
-var fexpr__48105 = cljs.core.swap_BANG_.cljs$core$IFn$_invoke$arity$4(measures.db.state,cljs.core.assoc,new cljs.core.Keyword(null,"baseline","baseline",1151033280),new_val);
-return (fexpr__48105.cljs$core$IFn$_invoke$arity$0 ? fexpr__48105.cljs$core$IFn$_invoke$arity$0() : fexpr__48105.call(null));
+var fexpr__48168 = cljs.core.swap_BANG_.cljs$core$IFn$_invoke$arity$4(measures.db.state,cljs.core.assoc,new cljs.core.Keyword(null,"baseline","baseline",1151033280),new_val);
+return (fexpr__48168.cljs$core$IFn$_invoke$arity$0 ? fexpr__48168.cljs$core$IFn$_invoke$arity$0() : fexpr__48168.call(null));
 });
 /**
  * Set a value in the database at the given keyword
@@ -26,8 +26,8 @@ cljs.core.swap_BANG_.cljs$core$IFn$_invoke$arity$4(measures.db.state,cljs.core.a
 return setTimeout(measures.base.render_math,(100));
 });
 measures.events.selected_measure = (function measures$events$selected_measure(){
-return new cljs.core.Keyword(null,"selected-measure","selected-measure",848135654).cljs$core$IFn$_invoke$arity$1((function (){var fexpr__48106 = cljs.core.deref(measures.db.state);
-return (fexpr__48106.cljs$core$IFn$_invoke$arity$0 ? fexpr__48106.cljs$core$IFn$_invoke$arity$0() : fexpr__48106.call(null));
+return new cljs.core.Keyword(null,"selected-measure","selected-measure",848135654).cljs$core$IFn$_invoke$arity$1((function (){var fexpr__48169 = cljs.core.deref(measures.db.state);
+return (fexpr__48169.cljs$core$IFn$_invoke$arity$0 ? fexpr__48169.cljs$core$IFn$_invoke$arity$0() : fexpr__48169.call(null));
 })());
 });
 /**
@@ -44,8 +44,8 @@ cljs.core.swap_BANG_.cljs$core$IFn$_invoke$arity$4(measures.db.state,cljs.core.a
 return setTimeout(measures.base.render_math,(100));
 });
 measures.events.selected_tool = (function measures$events$selected_tool(){
-return new cljs.core.Keyword(null,"selected-tool","selected-tool",-136917007).cljs$core$IFn$_invoke$arity$1((function (){var fexpr__48107 = cljs.core.deref(measures.db.state);
-return (fexpr__48107.cljs$core$IFn$_invoke$arity$0 ? fexpr__48107.cljs$core$IFn$_invoke$arity$0() : fexpr__48107.call(null));
+return new cljs.core.Keyword(null,"selected-tool","selected-tool",-136917007).cljs$core$IFn$_invoke$arity$1((function (){var fexpr__48170 = cljs.core.deref(measures.db.state);
+return (fexpr__48170.cljs$core$IFn$_invoke$arity$0 ? fexpr__48170.cljs$core$IFn$_invoke$arity$0() : fexpr__48170.call(null));
 })());
 });
 measures.events.go_home = (function measures$events$go_home(){

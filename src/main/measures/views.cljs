@@ -342,18 +342,18 @@
   (let [measure (info/current-measure)
         delta info/delta]
     [:<>
-     [:section.flex.flex-col.md:flex-eow 
+     [:section.flex.flex-col.md:flex-eow
 
       [:form.mt-2.ml-4
        #_{:no-validate true}
        [:div [enter {:min delta :max (- 1 delta) :step delta}
-                   db/state :baseline "Baseline risk "]]
+              db/state :baseline "Baseline risk "]]
 
        [:div [enter {:min (:min measure) :max (:max measure) :step (:step measure)}
-                   db/state (:key measure) (:title measure)]]
+              db/state (:key measure) (:title measure)]]
 
        [:div [enter {:min delta :max (- 1 delta) :step delta}
-                   db/state :final "Final 'exposed' risk"]]]]]))
+              db/state :final "Final 'exposed' risk"]]]]]))
 
 
 (defn master-detail
@@ -363,10 +363,13 @@
    #_[:div {:class "w-64"}
     [error-report]]
    [:div.flex.flex-col
-    [:div.flex.flex-col.sm:flex-row.bg-slate-200
-     [measures-menu]
-     [inputs-panel]
-     [status]]
+    [:div.flex.flex-col.sm.bg-slate-200
+     [:div.flex.flex-row.sm:flex-row
+      [measures-menu]
+      [inputs-panel]
+      [status]]
+     [:p.ml-4.mb-1.text-gray-600.text-sm "Red boxes indicate indicate out of range values, as also may 0 and 0.999"]]
+
     [maths-detail]]])
 
 
